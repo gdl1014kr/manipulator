@@ -6,15 +6,18 @@ https://qlalf-smithy.tistory.com/36
 
 
 
-<Ros2 camera_calibration package install>
+Ros2 camera_calibration package install
+  
 sudo apt update
 sudo apt install ros-humble-camera-calibration
 
-<calibration> - 15mm Checker Width, 8x10 board size
+calibration - 15mm Checker Width, 8x10 board size
+
 ros2 run camera_calibration cameracalibrator --size 7x9 --square 0.015 --ros-args -r image:=/camera/camera/color/image_raw
 
 
-<result>
+result
+
 **** Calibrating ****
 mono pinhole calibration...
 D = [0.36577003492985377, -1.41852325849264, -0.013243046628133612, -0.005181817729925357, 0.0]
