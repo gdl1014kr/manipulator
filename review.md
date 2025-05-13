@@ -50,9 +50,9 @@ GG-CNN의 실시간 성능을 활용하여, 다양한 시점에서의 grasp pred
 ## Method
 
 최적 grasp position(g)-
-1. gripper가 물체를 잡기 위해 도달해야 하는 3차원 공간에서의 위치(x,y,z) => p
-2. z축을 중심으로 한 gripper 회전 각도(angle) => f
-3. gripper의 너비(width) => w     
+* gripper가 물체를 잡기 위해 도달해야 하는 3차원 공간에서의 위치(x,y,z) => p
+* z축을 중심으로 한 gripper 회전 각도(angle) => f
+* gripper의 너비(width) => w     
 => g = (q, p , f, w)
 
 1. input & output
