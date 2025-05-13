@@ -2,11 +2,13 @@
 
 ## Abstract
 
-기존 로봇 grasp 기술(Open-loop grasping): 
+**기존 로봇 grasp 기술(Open-loop grasping)**: 
 1. image 상 grasp 후보를 선정해 일일이 sampling 및 후보에 대한 grasp 성공 가능성 점수를 통해 순위를 매기는 분류 방식. -> 계산 시간 오래걸림.(실시간에 부적합)
 2. 처음에 한 번 grasp 계획을 세우고 나면 고정된 goal position으로만 이동하기 때문에 동적인 환경 및 정확하지 않은 센서, 제어 값에서 사용 부적합.
 
- **GG-CNN(Generative Grasping Convolutional Neural Network)**: deep learning을 통해 input된 depth image의 **각 pixel(카메라로부터 해당 위치의 물체까지의 거리)**에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 object-independent grasp 수행(대규모 데이터셋을 통해 grasp 성공 확률이 높은 위치, 각도, 너비 등을 예측하는 방법을 학습)
+ **GG-CNN(Generative Grasping Convolutional Neural Network)**: 
+ deep learning을 통해 input된 depth image의 각 pixel(카메라로부터 해당 위치의 물체까지의 거리)에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 
+ object-independent grasp 수행(대규모 데이터셋을 통해 grasp 성공 확률이 높은 위치, 각도, 너비 등을 예측하는 방법을 학습)
 
  => 특징:
  - 가장 높은 품질의 pixel을 찾아 최적의 grasp 자세 결정. 낯선 물체 및 다양한 특성을 가진 물체, 동적인 환경(주변 환경이 실시간으로 변하거나 물체가 움직이는 환경), 센서 노이즈 및 제어 오차, 물체가 무질서하게 밀집되어 있거나 가려진 복잡한 환경(clutter)에서도 높은 그립 성공률(실시간)
@@ -23,7 +25,33 @@
  - 정적 객체, 동적 객체, 혼잡 환경에서 모두 높은 grasp 성공률
 
 
+## Conclusion
 
+1. 성과:
+
+- 경량화로 인한 속도 향상: 다른 grasp network에 비해 크기가 작아 매우 빠른 계산 시간(최대 50Hz) 확보. 이로 인해 closed-loop control 가능
+
+- 실시간성 확보:
+  1. depth image로부터 pixel 단위로 grasp pose 정보 생성하는 방식을 통해 기존의 grasp 후보들을 일일이 Sampling 및 Classification 방식의 한계 극복.
+  2. closed-loop grasping을 통해 동적 환경, 복잡한 환경에서 robust. 각각 88%, 87%의 높은 grasp 성공률
+ 
+
+
+다중 시점 파지의 중요성: GG-CNN의 픽셀 단위 파지 예측 기능 덕분에 여러 시점에서 얻은 파지 정보들을 쉽게 결합할 수 있음을 보여줍니다. 이는 물체들이 복잡하게 쌓여있는 클러터(clutter) 환경에서 물체 가려짐(occlusion) 문제를 극복하고 파지 성공률을 최대 10%까지 향상시키는 데 효과적입니다.
+네트워크 설계 및 훈련 분석: 실시간 실행을 위한 경량 네트워크 설계에는 성능과 계산 시간 사이의 균형이 필요함을 언급하며, 네트워크 설계 요소(예: 팽창된 합성곱)와 데이터 증강(data augmentation)의 중요성을 논합니다. 데이터 증강은 학습된 파지 알고리즘을 실제 로봇에 적용하는 데 필수적입니다.
+향후 연구 방향: 현재 시스템은 특정 물체를 인지하지는 않지만, GG-CNN이 생성하는 파지 맵에 물체 또는 어포던스(affordances) 마스크를 적용하여 기능을 확장할 수 있음을 시사합니다. 또한, 능동적인 시점 선택, 촉각 센서 통합, 또는 미는(pushing) 동작과 같은 다른 조작 행동과의 결합을 통해 시스템의 강건성을 더욱 높일 수 있다고 제안합니다.
+
+2. 한계 및 해결 방안:
+
+- 특정 재질(검정색, 반사되는 물체, 투명한 물체)에 대한 정확한 depth information 추출 어려움.
+  => 센서 융합.(ex:RGB+Depth)
+- gripper의 구조로 물리적인 한계 발생: 얇은 물체, 미끄러지는 물체, 깨지기 쉬운 물체 등 잡기 어려움.
+  => 촉각 센서와 같은 다중 센서 융합.
+  
+- 물체들이 밀집되어 있는 clutter 환경에서 gripper가 주변 물체와 충돌 및 grasp 실패 현상 발생.
+  => grasp 뿐만 아니라 pushing와 같은 다른 조작 action 학습.
+
+  
 
 
 
