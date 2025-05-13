@@ -70,7 +70,7 @@ Grasp Width Map (W): grasp width (픽셀 단위).
 
 속도: 전체 파이프라인(전처리 포함) 추론 시간은 약 19ms로, 최대 50Hz의 실시간 제어 가능.
 
-3. 학습 data 및 전처리
+3. dataset 및 전처리
 
 dataset: Cornell Grasping Dataset을 사용하여 학습.
 
@@ -82,7 +82,7 @@ dataset: Cornell Grasping Dataset을 사용하여 학습.
 
 데이터 증강을 통해 다양한 시야와 깊이 변화에 대응.
 
-4. 그립 예측 및 실행
+4. grasp prediction 및 실행
 그립 선택: Q 맵에서 가장 높은 값을 갖는 픽셀을 선택하여 해당 위치의 Φ와 W 값을 사용.
 
 좌표 변환: 선택된 픽셀 좌표를 카메라와 로봇 간의 변환 행렬을 통해 월드 좌표로 변환.
