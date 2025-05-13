@@ -17,7 +17,7 @@
  - grasp 동작 중에 센서로부터 실시간으로 주변 환경 정보를 받아들이고 이를 바탕으로 gripper의 움직임을 수정하여 goal grasping position 으로 전환(close-loop grasping)
  
  => 단점:
- - input 값이 depth image 이기 때문에 투명하거나 반사율이 높은 물체, 고도로 복잡한 표면에서는 성능 저하
+ - input 값이 depth image 이기 때문에 투명하거나 반사율이 높은 물체는 인식 성능 저하
 
  => 성능:
  - 정적 객체, 동적 객체, 혼잡 환경에서 모두 높은 grasp 성공률
