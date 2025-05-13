@@ -3,7 +3,7 @@
 ## Abstract
 
 **기존 로봇 grasp 기술(Open-loop grasping)**: 
-1. image 상 grasp 후보를 선정해 일일이 sampling 및 후보에 대한 grasp 성공 가능성 점수를 통해 순위를 매기는 분류 방식. -> 계산 시간 오래걸림.(실시간에 부적합)
+1. 물체의 image or point cloud에서 grasp position 및 angle을 선정해 여러 개 sampling. 각각에 대한 grasp quality 평가 및 순위 매겨 가장 좋은 후보 선택. -> 계산 시간 오래걸림.(실시간에 부적합)
 2. 처음에 한 번 grasp 계획을 세우고 나면 고정된 goal position으로만 이동하기 때문에 동적인 환경 및 정확하지 않은 센서, 제어 값에서 사용 부적합.
 
  **GG-CNN(Generative Grasping Convolutional Neural Network)**: 
@@ -12,6 +12,7 @@
  object-independent grasp 수행(Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표)
 
  => 특징:
+ - grasp 후보를 미리 정해두고 평가하는 것이 아니라, image 전체에 대한 grasp information을 한 번에 생성하는 방식
  - 가장 높은 품질의 pixel을 찾아 최적의 grasp 자세 결정. 낯선 물체 및 다양한 특성을 가진 물체, 동적인 환경(주변 환경이 실시간으로 변하거나 물체가 움직이는 환경), 센서 노이즈 및 제어 오차, 물체가 무질서하게 밀집되어 있거나 가려진 복잡한 환경(clutter)에서도 높은 그립 성공률(실시간)
 
 실시간 반응성: 경량화된 네트워크로 빠른 추론이 가능하여 동적 환경에서도 효과적.
