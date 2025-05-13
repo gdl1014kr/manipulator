@@ -2,10 +2,6 @@
 
 ## Abstract
 
-**기존 로봇 grasp 기술(Open-loop grasping)**: 
-1. 물체의 image or point cloud에서 grasp position 및 angle을 선정해 여러 개 sampling. 각각에 대한 grasp quality 평가 및 순위 매겨 가장 좋은 후보 선택. -> 계산 시간 오래걸림.(실시간에 부적합)
-2. 처음에 한 번 grasp 계획을 세우고 나면 고정된 goal position으로만 이동하기 때문에 동적인 환경 및 정확하지 않은 센서, 제어 값에서 사용 부적합.
-
  **GG-CNN(Generative Grasping Convolutional Neural Network)**: 
  
  deep learning을 통해 input된 depth image의 각 pixel(카메라로부터 해당 위치의 물체까지의 거리)에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 
@@ -29,13 +25,16 @@
 
 ## Contribution
 
-1. GG-CNN- pixel 단위의 실시간 grip prediction 
-기존의 그리핑 방법은 이미지에서 그립 후보를 샘플링하고 이를 평가하는 방식으로, 계산 비용이 높고 실시간 적용에 어려움이 있었습니다. 이에 반해, GG-CNN(Generative Grasping Convolutional Neural Network)은 입력된 깊이 이미지의 각 픽셀에 대해 그립 품질, 각도, 너비를 동시에 예측하여, 전체 이미지에 대한 그립 가능성을 실시간으로 평가합니다. 이러한 접근 방식은 복잡한 후보 샘플링 과정을 제거하고, 빠른 추론을 가능하게 합니다.
+1. GG-CNN- pixel 단위의 실시간 grasp prediction
+   
+기존 grasp method(Open-loop grasping)은 물체의 image or point cloud에서 grasp position 및 angle을 선정해 여러 개 sampling. 각각에 대한 grasp quality 평가 및 순위 매겨 가장 좋은 후보 선택. -> 계산 시간 오래걸림.(실시간에 부적합) + 처음에 한 번 grasp 계획을 세우고 나면 고정된 goal position으로만 이동하기 때문에 동적인 환경 및 정확하지 않은 센서, 제어 값에서 사용 부적합.
 
-2. 경량화된 네트워크 구조로 실시간 closed-loop 구현
-GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간으로 최대 50Hz의 실시간 폐루프 제어를 가능하게 합니다. 이러한 빠른 추론 속도는 동적 환경에서의 그립 수행에 필수적이며, 기존의 대형 네트워크 구조에 비해 하드웨어 요구사항을 크게 낮춥니다.
+반면, GG-CNN(Generative Grasping Convolutional Neural Network)은 input된 depth image의 각 pixel에 대해 grasp 품질(quality), 각도(angle), 너비(width)를 동시에 예측하여, 전체 image에 대한 grasp 가능성을 실시간으로 평가함으로써 복잡한 후보 sampling 과정을 거치지 않고도, 빠른 추론이 가능(실시간)
 
-3. 동적 환경에서의 강인한 그립 성능 입증
+2. 경량화된 network 구조로 실시간 closed-loop 구현
+GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간으로 최대 50Hz의 실시간 closed-loop 가능.
+
+3. 동적 환경에서의 강인한 grasp 성능 입증
 실험을 통해 GG-CNN은 정적 객체, 동적 객체, 혼잡한 환경에서 모두 높은 그립 성공률을 보였습니다:
 
 복잡한 형상의 미지 객체에 대해 84%의 성공률
