@@ -5,7 +5,7 @@
  **GG-CNN(Generative Grasping Convolutional Neural Network)**: 
  
  deep learning을 통해 input된 depth image의 각 pixel(카메라로부터 해당 위치의 물체까지의 거리)에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 
- object-independent grasp 수행(Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표)
+ object-independent grasp 수행.(Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표기)
 
  => 특징:
  - grasp 후보를 미리 정해두고 평가하는 것이 아니라, image 전체에 대한 grasp information을 한 번에 생성하는 방식
@@ -16,7 +16,6 @@
  - 정확도 요구 사항 완화(Camera 및 로봇 간의 정밀한 Calibration 이나 로봇 위치 제어의 정확도에 덜 의존적, 오차에도 작동)
  - grasp 동작 중에 센서로부터 실시간으로 주변 환경 정보를 받아들이고 이를 바탕으로 gripper의 움직임을 수정하여 goal grasping position 으로 전환(close-loop grasping)
  
-
  => 단점:
  - input 값이 depth image 이기 때문에 투명하거나 반사율이 높은 물체, 고도로 복잡한 표면에서는 성능 저하
 
@@ -32,7 +31,7 @@
 반면, GG-CNN(Generative Grasping Convolutional Neural Network)은 input된 depth image의 각 pixel에 대해 grasp 품질(quality), 각도(angle), 너비(width)를 동시에 예측하여, 전체 image에 대한 grasp 가능성을 실시간으로 평가함으로써 복잡한 후보 sampling 과정을 거치지 않고도, 빠른 추론이 가능(실시간)
 
 2. 경량화된 network 구조로 실시간 closed-loop 구현
-GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간으로 최대 50Hz의 실시간 closed-loop 가능.
+GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간으로 최대 50Hz의 실시간 depth image를 받아 지속적으로 grasp position update & control(closed-loop) 가능.
 
 3. 동적 환경에서의 강인한 grasp 성능 입증
 실험을 통해 GG-CNN은 정적 객체, 동적 객체, 혼잡한 환경에서 모두 높은 그립 성공률을 보였습니다:
@@ -48,7 +47,11 @@ GG-CNN의 실시간 성능을 활용하여, 다양한 시점에서의 그립 예
 
 ## Method
 
-최적 파지 자세- 로봇 그리퍼가 물체를 잡기 위해 도달해야 하는 3차원 공간에서의 위치(x,y,z), z축을 중심으로 한 회전 각도, gripper의 너비(width)
+최적 grasp position(g)-
+1. gripper가 물체를 잡기 위해 도달해야 하는 3차원 공간에서의 위치(x,y,z) => p
+2. z축을 중심으로 한 gripper 회전 각도(angle) => f
+3. gripper의 너비(width) => w     
+=> g = (q, p , f, w)
 
 1. input & output
 input: 300×300 pixel의 normalization된 depth image.
@@ -60,7 +63,6 @@ Grasp Quality Map (Q): grasp 성공 확률(품질, quality) (0~1 사이의 값).
 Grasp Angle Map (Φ): grasp angle (−π/2 ~ π/2 범위).
 
 Grasp Width Map (W): grasp width (픽셀 단위).
-ResearchGate
 
 2. network architecture
 
@@ -116,7 +118,6 @@ Closed-loop: 실시간으로 깊이 이미지를 받아 지속적으로 그립 �
 
 여러 시점에서 얻은 정보를 조합함으로써, 한 시점에서는 가려져 보이지 않았던 좋은 파지 지점 발견 가능.
 다양한 각도에서 물체를 관찰하며 깊이 카메라의 측정 오류나 노이즈로 인한 부정확한 예측을 보완하고, 더 정확하고 신뢰할 수 있는 파지 정보를 얻을 수 있음.
-  
 - gripper의 구조로 물리적인 한계 발생: 얇은 물체, 미끄러지는 물체, 깨지기 쉬운 물체 등 잡기 어려움.
   => 촉각 센서와 같은 다중 센서 융합.
 - 물체들이 밀집되어 있는 clutter 환경에서 gripper가 주변 물체와 충돌 및 grasp 실패 현상 발생.
