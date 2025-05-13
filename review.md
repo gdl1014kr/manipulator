@@ -24,7 +24,7 @@
 
 ## Contribution
 
-1. GG-CNN- pixel 단위의 실시간 grasp prediction
+1. GG-CNN: pixel 단위의 실시간 grasp prediction
    
 기존 grasp method(Open-loop grasping)은 물체의 image or point cloud에서 grasp position 및 angle을 선정해 여러 개 sampling. 각각에 대한 grasp quality 평가 및 순위 매겨 가장 좋은 후보 선택. -> 계산 시간 오래걸림.(실시간에 부적합) + 처음에 한 번 grasp 계획을 세우고 나면 고정된 goal position으로만 이동하기 때문에 동적인 환경 및 정확하지 않은 센서, 제어 값에서 사용 부적합.
 
@@ -34,6 +34,7 @@
 GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간으로 최대 50Hz의 실시간 depth image를 받아 지속적으로 grasp position update & control(closed-loop) 가능.
 
 3. 동적 환경에서의 강인한 grasp 성능 입증
+   
 실험을 통해 GG-CNN은 정적 객체, 동적 객체, 혼잡한 환경에서 모두 높은 그립 성공률을 보였습니다:
 
 복잡한 형상의 미지 객체에 대해 84%의 성공률
@@ -42,8 +43,9 @@ GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 
 
 동적 환경에서 88%의 성공률
 
-4. 다중 시점(multi-view) 기반의 grasp prediction으로 혼잡 환경에서의 성능 향상
-GG-CNN의 실시간 성능을 활용하여, 다양한 시점에서의 그립 예측을 통합하는 방법을 제안하였습니다. 이를 통해 가려진 영역이나 복잡한 배치의 물체에 대한 그립 성공률을 최대 10%까지 향상
+4. 다중 시점(multi-view) 기반의 grasp prediction으로 혼잡(clutter) 환경에서의 성능 향상
+GG-CNN의 실시간 성능을 활용하여, 다양한 시점에서의 grasp prediction.
+=> 가려진 영역이나 복잡한 배치의 물체에 대한 grasp 성공률을 최대 10%까지 향상
 
 ## Method
 
