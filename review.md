@@ -4,12 +4,12 @@
 
  **GG-CNN(Generative Grasping Convolutional Neural Network)**: 
  
- deep learning을 통해 input된 depth image의 각 pixel(카메라로부터 해당 위치의 물체까지의 거리)에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 
- object-independent grasp 수행.(Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표기)
+ deep learning을 통해 input된 depth image의 각 pixel(카메라로부터 해당 위치의 물체까지의 거리)에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 object-independent grasp 수행.
+ (Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표기)
 
  => 특징:
  - grasp 후보를 미리 정해두고 평가하는 것이 아니라, image 전체에 대한 grasp information을 한 번에 생성하는 방식
- - 가장 높은 품질의 pixel을 찾아 최적의 grasp 자세 결정. 낯선 물체 및 다양한 특성을 가진 물체, 동적인 환경(주변 환경이 실시간으로 변하거나 물체가 움직이는 환경), 센서 노이즈 및 제어 오차, 물체가 무질서하게 밀집되어 있거나 가려진 복잡한 환경(clutter)에서도 높은 그립 성공률(실시간)
+ - 가장 높은 품질의 pixel을 찾아 최적의 grasp 자세 결정. 정적 환경 뿐만 아니라 낯선 물체 및 다양한 특성을 가진 물체, 동적인 환경(주변 환경이 실시간으로 변하거나 물체가 움직이는 환경), 센서 노이즈 및 제어 오차, 물체가 무질서하게 밀집되어 있거나 가려진 복잡한 환경(clutter)에서도 높은 그립 성공률(실시간)
 
  => 장점:
  - grasp 대상 물체가 움직이거나 주변 환경이 예측 불가능하게 변화하는 동적 환경에서도 실시간 grasp 예측 가능.(경량화된 network 및 속도 향상(초당 50Hz으로 depth image 받아 실시간으로 gripper 위치 update)
