@@ -92,7 +92,8 @@ Closed-loop: 실시간으로 깊이 이미지를 받아 지속적으로 그립 �
 
 1. 성과:
 
-- 경량화된 network로 인한 속도 향상: 다른 grasp network에 비해 크기가 작아 매우 빠른 계산 시간(최대 50Hz) 확보. 이로 인해 closed-loop control 가능
+- 경량화된 network로 인한 속도 향상: 다른 grasp network에 비해 크기가 작아 매우 빠른 계산 시간(최대 50Hz) 확보.
+  이로 인한 closed-loop control 가능
 
 - 실시간성 확보:
   1. depth image로부터 pixel 단위로 grasp pose 정보 생성하는 방식을 통해 기존의 grasp 후보들을 일일이 Sampling 및 Classification 방식의 한계 극복.
@@ -102,7 +103,7 @@ Closed-loop: 실시간으로 깊이 이미지를 받아 지속적으로 그립 �
 
 - 특정 재질(검정색, 반사되는 물체, 투명한 물체)에 대한 정확한 depth information 추출 어려움.
   => multi-view fusion method:
-  로봇이 여러 다른 위치나 경로를 따라 이동하면서 여러 장의 depth image 촬영 -> 각 image에서 GG-CNN으로 생성된 grip map 정보들을 수집 -> 수집된 정보에서 각 격자 셀에 대해 여러 시점에서 관측된 grasp quality(품질), 각도(angle), 너비(width) 정보들의 평균을 계산하여 최종 grasp 후보 결정(grasp 성공률 최대 10% 향상)
+  로봇이 여러 다른 위치나 경로를 따라 이동하면서 여러 장의 depth image 촬영 -> 각 image에서 GG-CNN으로 생성된 grasp map information 수집 -> 수집된 information에서 각 격자 셀에 대해 여러 시점에서 관측된 grasp quality(품질), 각도(angle), 너비(width) 정보들의 평균을 계산하여 최종 grasp 후보 결정(grasp 성공률 최대 10% 향상)
 
 여러 시점에서 얻은 정보를 조합함으로써, 한 시점에서는 가려져 보이지 않았던 좋은 grasp 지점 발견 가능.
 다양한 각도에서 물체를 관찰하며 깊이 카메라의 측정 오류나 노이즈로 인한 부정확한 예측을 보완하고, 더 정확하고 신뢰할 수 있는 grasp information을 얻을 수 있음.
