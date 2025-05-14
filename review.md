@@ -117,6 +117,7 @@ GG-CNN의 실시간 성능을 활용하여, multi-view에서의 grasp prediction
 다양한 각도에서 물체를 관찰하며 깊이 카메라의 측정 오류나 노이즈로 인한 부정확한 예측을 보완하고, 더 정확하고 신뢰할 수 있는 grasp information을 얻을 수 있음.
 
 - gripper의 구조로 물리적인 한계 발생: 얇은 물체, 미끄러지는 물체, 깨지기 쉬운 물체 등 잡기 어려움.
+  
   => 촉각 센서와 같은 다중 Sensor fusion.
   
 - 물체들이 밀집되어 있는 clutter 환경에서 gripper가 주변 물체와 충돌 및 grasp 실패 현상 발생.
