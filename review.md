@@ -36,7 +36,7 @@
 - GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간
 - 최대 50Hz의 실시간 depth image를 받아 지속적으로 grasp position update & control(closed-loop) 가능.
 
-4. 동적 환경에서의 강인한 grasp 성능 입증
+3. 다양한 환경에서의 강인한 grasp 성능 입증
    
 GG-CNN은 정적 객체, 동적 객체, clutter한 환경에서 모두 높은 그립 성공률
 
