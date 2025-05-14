@@ -33,9 +33,10 @@
 반면, GG-CNN(Generative Grasping Convolutional Neural Network)은 input된 depth image의 각 pixel에 대해 grasp 품질(quality), 각도(angle), 너비(width)를 동시에 예측하여, 전체 image에 대한 grasp 가능성을 실시간으로 평가함으로써 복잡한 후보 sampling 과정을 거치지 않고도, 빠른 추론이 가능(실시간)
 
 2. 경량화된 network 구조로 실시간 closed-loop 구현
-GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간으로 최대 50Hz의 실시간 depth image를 받아 지속적으로 grasp position update & control(closed-loop) 가능.
+- GG-CNN은 약 62,000개의 파라미터를 가진 경량화된 완전 합성곱 신경망(Fully Convolutional Network)으로, 약 19ms의 추론 시간
+- 최대 50Hz의 실시간 depth image를 받아 지속적으로 grasp position update & control(closed-loop) 가능.
 
-3. 동적 환경에서의 강인한 grasp 성능 입증
+4. 동적 환경에서의 강인한 grasp 성능 입증
    
 GG-CNN은 정적 객체, 동적 객체, clutter한 환경에서 모두 높은 그립 성공률
 
@@ -45,13 +46,13 @@ GG-CNN의 실시간 성능을 활용하여, 다양한 시점에서의 grasp pred
 
 ## Method
 
-최적 grasp position(g)-
-* gripper가 물체를 잡기 위해 도달해야 하는 3차원 공간에서의 위치(x,y,z) => p
-* z축을 중심으로 한 gripper 회전 각도(angle) => f
-* gripper의 너비(width) => w     
+최적 grasp position(g):
+- gripper가 물체를 잡기 위해 도달해야 하는 3차원 공간에서의 위치(x,y,z) => p
+- z축을 중심으로 한 gripper 회전 각도(angle) => f
+- gripper의 너비(width) => w     
 => g = (q, p , f, w)
 
-1. input & output
+1. Input & Output
 input: 300×300 pixel의 normalization된 depth image.
 
 output: 각 pixel에 대해 다음 세 가지 prediction :
@@ -60,7 +61,7 @@ Grasp Quality Map (Q): grasp 성공 확률(품질, quality) (0~1 사이의 값).
 
 Grasp Angle Map (Φ): grasp angle (−π/2 ~ π/2 범위).
 
-Grasp Width Map (W): grasp width (픽셀 단위).
+Grasp Width Map (W): grasp width (pixel 단위).
 
 2. network architecture
 
