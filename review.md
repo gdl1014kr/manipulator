@@ -42,6 +42,7 @@ GG-CNN은 Static Object, Dynamic Object, clutter한 환경에서 모두 높은 g
 
 4. 다중 시점(multi-view) 기반의 grasp prediction으로 혼잡(clutter) 환경에서의 성능 향상
 GG-CNN의 실시간 성능을 활용하여, multi-view에서의 grasp prediction.
+
 => 가려진 영역이나 복잡한 배치의 물체에 대한 grasp 성공률을 최대 10% 까지 향상
 
 ## Method
