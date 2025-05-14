@@ -38,7 +38,7 @@
 
 3. 다양한 환경에서의 강인한 grasp 성능 입증
    
-GG-CNN은 Static Object, Dynamic Object, clutter한 환경에서 모두 높은 그립 성공률
+GG-CNN은 Static Object, Dynamic Object, clutter한 환경에서 모두 높은 grasp 성공률
 
 4. 다중 시점(multi-view) 기반의 grasp prediction으로 혼잡(clutter) 환경에서의 성능 향상
 GG-CNN의 실시간 성능을 활용하여, multi-view에서의 grasp prediction.
@@ -91,7 +91,7 @@ dataset: Cornell Grasping Dataset을 사용하여 학습.
 
 Open-loop: 단일 프레임에서 예측한대로 grasp 수행.
 
-Closed-loop: 실시간으로 깊이 이미지를 받아 지속적으로 grasp position update & Control
+Closed-loop: 실시간으로 dapth image를 받아 지속적으로 grasp position update & Control
 
 ## Conclusion
 
