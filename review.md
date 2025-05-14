@@ -5,7 +5,7 @@
  **GG-CNN(Generative Grasping Convolutional Neural Network)**: 
  
  deep learning을 통해 input된 depth image의 각 pixel(카메라로부터 해당 위치의 물체까지의 거리)에 대해 grasp 품질(Quality)(성공 확률), grasp 각도(Angle), grasp 너비(Width)를 동시에 예측하고 object-independent grasp 수행.
- (Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표기)
+ (Cornell Grasping Dataset을 통해 label된 grasp rectangle을 pixel 단위의 map으로 변환하여 grasp 성공 확률이 높은 위치, 각도, 너비를 예측하도록 학습, 각도는 주기성을 고려하여 sine 및 cosine으로 표기)
 
  => 특징:
  - grasp 후보를 미리 정해두고 평가하는 것이 아니라, image 전체에 대한 grasp information을 한 번에 생성하는 방식
@@ -104,11 +104,11 @@ Closed-loop: 실시간으로 깊이 이미지를 받아 지속적으로 그립 �
   => multi-view fusion method:
   로봇이 여러 다른 위치나 경로를 따라 이동하면서 여러 장의 depth image 촬영 -> 각 image에서 GG-CNN으로 생성된 grip map 정보들을 수집 -> 수집된 정보에서 각 격자 셀에 대해 여러 시점에서 관측된 grasp quality(품질), 각도(angle), 너비(width) 정보들의 평균을 계산하여 최종 grasp 후보 결정(grasp 성공률 최대 10% 향상)
 
-여러 시점에서 얻은 정보를 조합함으로써, 한 시점에서는 가려져 보이지 않았던 좋은 파지 지점 발견 가능.
-다양한 각도에서 물체를 관찰하며 깊이 카메라의 측정 오류나 노이즈로 인한 부정확한 예측을 보완하고, 더 정확하고 신뢰할 수 있는 파지 정보를 얻을 수 있음.
+여러 시점에서 얻은 정보를 조합함으로써, 한 시점에서는 가려져 보이지 않았던 좋은 grasp 지점 발견 가능.
+다양한 각도에서 물체를 관찰하며 깊이 카메라의 측정 오류나 노이즈로 인한 부정확한 예측을 보완하고, 더 정확하고 신뢰할 수 있는 grasp information을 얻을 수 있음.
 
 - gripper의 구조로 물리적인 한계 발생: 얇은 물체, 미끄러지는 물체, 깨지기 쉬운 물체 등 잡기 어려움.
-  => 촉각 센서와 같은 다중 센서 융합.
+  => 촉각 센서와 같은 다중 Sensor fusion.
   
 - 물체들이 밀집되어 있는 clutter 환경에서 gripper가 주변 물체와 충돌 및 grasp 실패 현상 발생.
   => grasp 뿐만 아니라 pushing와 같은 다른 조작 action 학습.
