@@ -38,12 +38,12 @@
 
 3. 다양한 환경에서의 강인한 grasp 성능 입증
    
-GG-CNN은 Static Object, Dynamic Object, clutter한 환경에서 모두 높은 grasp 성공률
+    GG-CNN은 Static Object, Dynamic Object, clutter한 환경에서 모두 높은 grasp 성공률
 
 4. 다중 시점(multi-view) 기반의 grasp prediction으로 혼잡(clutter) 환경에서의 성능 향상
 GG-CNN의 실시간 성능을 활용하여, multi-view에서의 grasp prediction.
 
-=> 가려진 영역이나 복잡한 배치의 물체에 대한 grasp 성공률을 최대 10% 까지 향상
+    => 가려진 영역이나 복잡한 배치의 물체에 대한 grasp 성공률을 최대 10% 까지 향상
 
 ## Method
 
@@ -56,43 +56,44 @@ GG-CNN의 실시간 성능을 활용하여, multi-view에서의 grasp prediction
 1. Input & Output
 
 
-input: 300×300 pixel의 normalization된 depth image.
+    input: 300×300 pixel의 normalization된 depth image.
 
-output: 각 pixel에 대해 다음 세 가지 prediction :
+    output: 각 pixel에 대해 다음 세 가지 prediction :
 
-Grasp Quality Map (Q): grasp 성공 확률(품질, quality) (0~1 사이의 값).
+    Grasp Quality Map (Q): grasp 성공 확률(품질, quality) (0~1 사이의 값).
 
-Grasp Angle Map (Φ): grasp angle (−π/2 ~ π/2 범위).
+    Grasp Angle Map (Φ): grasp angle (−π/2 ~ π/2 범위).
 
-Grasp Width Map (W): grasp width (pixel 단위).
+    Grasp Width Map (W): grasp width (pixel 단위).
 
 
 2. Network Architecture
 
-구조: Fully Convolutional Network (FCN) 형태로, 약 62,000개의 파라미터를 가짐.
+    구조: Fully Convolutional Network (FCN) 형태로, 약 62,000개의 파라미터를 가짐.
 
-속도: 전체 pipeline(전처리 포함) 추론 시간은 약 19ms로, 최대 50Hz의 실시간 제어 가능.
+    속도: 전체 pipeline(전처리 포함) 추론 시간은 약 19ms로, 최대 50Hz의 실시간 제어 가능.
 
 
 3. dataset 및 전처리
 
-dataset: Cornell Grasping Dataset을 사용하여 학습.
+    dataset: Cornell Grasping Dataset을 사용하여 학습.
 
-전처리: 각 grasp rectangle을 중심으로 하는 mask를 생성하여 해당 영역의 Q, Φ, W 값을 설정.
+    전처리: 각 grasp rectangle을 중심으로 하는 mask를 생성하여 해당 영역의 Q, Φ, W 값을 설정.
 
-각도 Φ는 주기성을 고려하여 sin(2Φ)와 cos(2Φ)로 변환하여 학습.
+    각도 Φ는 주기성을 고려하여 sin(2Φ)와 cos(2Φ)로 변환하여 학습.
 
 
 4. grasp prediction 및 실행
-그립 선택: Q map에서 가장 높은 값을 갖는 pixel을 선택하여 해당 위치의 Φ와 W 값을 사용.
 
-좌표 변환: 선택된 pixel 좌표를 카메라와 로봇 간의 변환 행렬을 통해 월드 좌표로 변환.
+    그립 선택: Q map에서 가장 높은 값을 갖는 pixel을 선택하여 해당 위치의 Φ와 W 값을 사용.
 
-실행 방식:
+    좌표 변환: 선택된 pixel 좌표를 카메라와 로봇 간의 변환 행렬을 통해 월드 좌표로 변환.
 
-Open-loop: 단일 프레임에서 예측한대로 grasp 수행.
+    실행 방식:
 
-Closed-loop: 실시간으로 dapth image를 받아 지속적으로 grasp position update & Control
+    Open-loop: 단일 프레임에서 예측한대로 grasp 수행.
+
+    Closed-loop: 실시간으로 dapth image를 받아 지속적으로 grasp position update & Control
 
 ## Conclusion
 
@@ -108,6 +109,7 @@ Closed-loop: 실시간으로 dapth image를 받아 지속적으로 grasp positio
 2. 한계 및 해결 방안:
 
 - 특정 재질(검정색, 반사되는 물체, 투명한 물체)에 대한 정확한 depth information 추출 어려움.
+ 
   => multi-view fusion method:
   로봇이 여러 다른 위치나 경로를 따라 이동하면서 여러 장의 depth image 촬영 -> 각 image에서 GG-CNN으로 생성된 grasp map information 수집 -> 수집된 information에서 각 격자 셀에 대해 여러 시점에서 관측된 grasp quality(품질), 각도(angle), 너비(width) 정보들의 평균을 계산하여 최종 grasp 후보 결정(grasp 성공률 최대 10% 향상)
 
@@ -118,4 +120,5 @@ Closed-loop: 실시간으로 dapth image를 받아 지속적으로 grasp positio
   => 촉각 센서와 같은 다중 Sensor fusion.
   
 - 물체들이 밀집되어 있는 clutter 환경에서 gripper가 주변 물체와 충돌 및 grasp 실패 현상 발생.
+
   => grasp 뿐만 아니라 pushing와 같은 다른 조작 action 학습.
