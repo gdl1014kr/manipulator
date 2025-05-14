@@ -65,11 +65,13 @@ Grasp Angle Map (Φ): grasp angle (−π/2 ~ π/2 범위).
 
 Grasp Width Map (W): grasp width (pixel 단위).
 
+
 2. Network Architecture
 
 구조: Fully Convolutional Network (FCN) 형태로, 약 62,000개의 파라미터를 가짐.
 
 속도: 전체 pipeline(전처리 포함) 추론 시간은 약 19ms로, 최대 50Hz의 실시간 제어 가능.
+
 
 3. dataset 및 전처리
 
@@ -78,6 +80,7 @@ dataset: Cornell Grasping Dataset을 사용하여 학습.
 전처리: 각 grasp rectangle을 중심으로 하는 mask를 생성하여 해당 영역의 Q, Φ, W 값을 설정.
 
 각도 Φ는 주기성을 고려하여 sin(2Φ)와 cos(2Φ)로 변환하여 학습.
+
 
 4. grasp prediction 및 실행
 그립 선택: Q map에서 가장 높은 값을 갖는 pixel을 선택하여 해당 위치의 Φ와 W 값을 사용.
