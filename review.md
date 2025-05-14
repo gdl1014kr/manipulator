@@ -9,11 +9,11 @@
 
  => 특징:
  - grasp 후보를 미리 정해두고 평가하는 것이 아니라, image 전체에 대한 grasp information을 한 번에 생성하는 방식
- - 가장 높은 품질의 pixel을 찾아 최적의 grasp 자세 결정. Static 환경 뿐만 아니라 낯선 물체 및 다양한 특성을 가진 물체, Dynamic 환경(주변 환경이 실시간으로 변하거나 물체가 움직이는 환경), 센서 노이즈 및 제어 오차, 물체가 무질서하게 밀집되어 있거나 가려진 clutter 환경에서도 높은 그립 성공률(실시간)
+ - 가장 높은 품질의 pixel을 찾아 최적의 grasp 자세 결정. Static 환경 뿐만 아니라 낯선 물체 및 다양한 특성을 가진 물체, Dynamic 환경(주변 환경이 실시간으로 변하거나 물체가 움직이는 환경), 센서 노이즈 및 제어 오차, 물체가 무질서하게 밀집되어 있거나 가려진 clutter 환경에서도 높은 grasp 성공률(실시간)
 
  => 장점:
  - grasp 대상 물체가 움직이거나 주변 환경이 예측 불가능하게 변화하는 Dynamic 환경에서도 실시간 grasp 예측 가능.(경량화된 network 및 속도 향상(초당 50Hz으로 depth image 받아 실시간으로 gripper 위치 update)
- - 정확도 요구 사항 완화(Camera 및 로봇 간의 정밀한 Calibration 이나 로봇 위치 제어의 정확도에 덜 의존적, 오차에도 작동)
+ - 정확도 요구 사항 완화(Camera 및 로봇 간의 정밀한 Calibration 이나 로봇 position control의 정확도에 덜 의존적, 오차에도 작동)
  - grasp 동작 중에 센서로부터 실시간으로 주변 환경 정보를 받아들이고 이를 바탕으로 gripper의 움직임을 수정하여 goal grasping position 으로 전환(close-loop grasping)
  
  => 단점:
