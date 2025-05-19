@@ -132,6 +132,7 @@ python3 owl_predict.py \
 
 ## (optional) Install TRTPose - For the pose example.
 
+cd ~
 git clone https://github.com/NVIDIA-AI-IOT/trt_pose
 cd trt_pose
 python3 setup.py develop --user
