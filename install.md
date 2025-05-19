@@ -149,3 +149,8 @@ cd nanosam
 python3 setup.py develop --user
 
 # Build the TensorRT engine for the mask decoder
+
+## 1. install timm
+python3 -m pip install --user timm
+
+## 2. 
