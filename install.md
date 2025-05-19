@@ -129,6 +129,35 @@ python3 owl_predict.py \
 ---------------------------------------------------------------------------------------------
 # ROS2-NanoOWL Setup
 
+## 원하는 위치에 ROS2NanoOWL 워크스페이스 생성
+mkdir -p ~/ROS2NanoOWL/src
+cd ~/ROS2NanoOWL/src
+
+## Git 리포지토리 클론
+
+cd ~/ROS2NanoOWL/src
+git clone https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_common.git
+git clone https://github.com/NVIDIA-AI-IOT/ROS2-NanoOWL.git
+git clone https://github.com/NVIDIA-AI-IOT/nanoowl.git
+git clone https://github.com/NVIDIA-AI-IOT/torch2trt.git
+git clone --branch humble https://github.com/ros2/demos.git
+
+## Docker 컨테이너 실행
+
+sudo usermod -aG docker $USER
+newgrp docker
+cd ~/ROS2NanoOWL/src/isaac_ros_common
+./scripts/run_dev.sh -d ~/ROS2NanoOWL
+
+##
+cd ..
+git clone --branch v0.18.0 https://github.com/pytorch/vision.git
+cd vision
+pip install .
+
+
+
+
 ---------------------------------------------------------------------------------------------
 # NanoSAM Setup(Install the dependencies)
 
