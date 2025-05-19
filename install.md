@@ -147,3 +147,5 @@ cd ~
 git clone https://github.com/NVIDIA-AI-IOT/nanosam
 cd nanosam
 python3 setup.py develop --user
+
+# Build the TensorRT engine for the mask decoder
