@@ -104,6 +104,7 @@ python setup.py install --user
 
 python3 -m pip install transformers
 
+
 # Install the NanoOWL package.
 
 git clone https://github.com/NVIDIA-AI-IOT/nanoowl
