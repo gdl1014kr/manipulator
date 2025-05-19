@@ -1,4 +1,4 @@
-#hangul install
+# hangul install
 
 sudo apt upgrade ibus-hangul -y
 
@@ -95,3 +95,23 @@ python setup.py install --user
 ## 4. Install the Transformers library
 
 python3 -m pip install transformers
+
+# Install the NanoOWL package.
+
+git clone https://github.com/NVIDIA-AI-IOT/nanoowl
+cd nanoowl
+python3 setup.py develop --user
+
+# Build the TensorRT engine for the OWL-ViT vision encoder
+
+mkdir -p data
+python3 -m nanoowl.build_image_encoder_engine \
+    data/owl_image_encoder_patch32.engine
+
+# Run an example prediction to ensure everything is working
+
+cd examples
+python3 owl_predict.py \
+    --prompt="[an owl, a glove]" \
+    --threshold=0.1 \
+    --image_encoder_engine=../data/owl_image_encoder_patch32.engine
