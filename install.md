@@ -2,19 +2,19 @@
 
 sudo apt upgrade ibus-hangul -y
 
-
+------------------------------------------------------------------------------------------------------
 # Chromium browser install
 
 ## snap
 
 sudo snap install chromium
-
+----------------------------------------------------------------------------------------------------
 # Firefox install
 
 ## snap
 
 sudo snap install firefox
-
+---------------------------------------------------------------------------------------------------
 # ROS2 Humble install
 
 ## Set locale(UTF-8)
@@ -60,7 +60,7 @@ sudo apt install ros-humble-ros-base
 sudo apt install ros-dev-tools
 
 
-
+-------------------------------------------------------------------------------------------------------------
 # NanoOWL Setup(Install the dependencies)
 
 ## 1. Pytorch & torchvision install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
@@ -127,6 +127,7 @@ python3 owl_predict.py \
     --threshold=0.1 \
     --image_encoder_engine=../data/owl_image_encoder_patch32.engine
 
+---------------------------------------------------------------------------------------------
 # NanoSAM Setup(Install the dependencies)
 
 ## (optional) Install TRTPose - For the pose example.
@@ -153,4 +154,13 @@ python3 setup.py develop --user
 ## 1. install timm
 python3 -m pip install --user timm
 
-## 2. 
+## 2. Export the MobileSAM mask decoder ONNX file
+mkdir -p data
+python3 -m nanosam.tools.export_sam_mask_decoder_onnx \
+    --model-type=vit_t \
+    --checkpoint=assets/mobile_sam.pt \
+    --output=data/mobile_sam_mask_decoder.onnx
+
+## 3. PATH에 trtexec 경로 추가
+echo 'export PATH=$PATH:/usr/src/tensorrt/bin' >> ~/.bashrc
+source ~/.bashrc
