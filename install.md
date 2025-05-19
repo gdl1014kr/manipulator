@@ -85,8 +85,10 @@ python3 -m pip install onnx==1.14.1
 
 python3 -m pip install --upgrade pip; python3 -m pip install numpy==1.26.1; python3 -m pip install --no-cache $TORCH_INSTALL
 
-### torchvision install
+### torchvision install(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torchvision 0.18.0 download 선행)
 
+python3 -m pip install --no-cache-dir \
+  ~/Downloads/torchvision-0.18.0a0+6043bc2-cp310-cp310-linux_aarch64.whl
 
 
 ## 2. torch2trt install
