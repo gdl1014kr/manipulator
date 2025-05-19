@@ -4,21 +4,11 @@
 
 sudo snap install chromium
 
-## apt
-
-sudo apt update
-sudo apt install chromium-browser
-
 # Firefox install
 
 ## snap
 
 sudo snap install firefox
-
-## apt
-
-sudo apt update
-sudo apt install firefox
 
 # ROS2 Humble install
 
