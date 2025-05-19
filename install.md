@@ -1,3 +1,8 @@
+#hangul install
+
+sudo apt upgrade ibus-hangul -y
+
+
 # Chromium browser install
 
 ## snap
