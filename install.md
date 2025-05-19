@@ -59,7 +59,7 @@ sudo apt install ros-humble-ros-base
 
 sudo apt install ros-dev-tools
 
-# Jetpack 6.0 install Pytorch
+# Pytorch install(Jetpack 6.0) 
 
 sudo apt-get -y update; 
 sudo apt-get install -y  python3-pip libopenblas-dev;
@@ -67,6 +67,11 @@ sudo apt-get install -y  python3-pip libopenblas-dev;
 ## 환경변수에 whl 파일 경로 지정(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torch 2.2.0 download 선행)
 
 export TORCH_INSTALL=/home/iram/Downloads/torch-2.3.0-cp310-cp310-linux_aarch64.whl
+
+## PATH 환경변수 설정
+
+echo 'export PATH=$PATH:/home/iram/.local/bin' >> ~/.bashrc
+source ~/.bashrc
 
 ## onnx install
 
