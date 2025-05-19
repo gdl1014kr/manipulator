@@ -1,3 +1,7 @@
+# terminator install
+
+sudo apt install terminator
+
 # Hangul install
 
 sudo apt upgrade ibus-hangul -y
