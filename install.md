@@ -138,6 +138,7 @@ python3 setup.py develop --user
 
 ## (optional) Install the Transformers library - For the OWL ViT example.
 
+cd ~
 cd nanosam
 python3 -m pip install transformers
 
