@@ -68,7 +68,7 @@ sudo apt install ros-dev-tools
 sudo apt-get -y update; 
 sudo apt-get install -y  python3-pip libopenblas-dev;
 
-### 환경변수에 whl 파일 경로 지정(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torch 2.2.0 download 선행)
+### 환경변수에 whl 파일 경로 지정(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torch 2.3.0 download 선행)
 
 export TORCH_INSTALL=/home/iram/Downloads/torch-2.3.0-cp310-cp310-linux_aarch64.whl
 
