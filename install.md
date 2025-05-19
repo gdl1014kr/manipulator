@@ -63,6 +63,8 @@ sudo apt install ros-dev-tools
 
 ## 1. Pytorch & torchvision install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
 
+### Install system packages required by PyTorch
+
 sudo apt-get -y update; 
 sudo apt-get install -y  python3-pip libopenblas-dev;
 
