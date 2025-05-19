@@ -59,7 +59,7 @@ sudo apt install ros-humble-ros-base
 
 sudo apt install ros-dev-tools
 
-# Pytorch install(Jetpack 6.0) 
+# Pytorch install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
 
 sudo apt-get -y update; 
 sudo apt-get install -y  python3-pip libopenblas-dev;
