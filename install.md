@@ -59,24 +59,39 @@ sudo apt install ros-humble-ros-base
 
 sudo apt install ros-dev-tools
 
-# Pytorch install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
+# Install the dependencies
+
+## 1. Pytorch install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
 
 sudo apt-get -y update; 
 sudo apt-get install -y  python3-pip libopenblas-dev;
 
-## 환경변수에 whl 파일 경로 지정(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torch 2.2.0 download 선행)
+### 환경변수에 whl 파일 경로 지정(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torch 2.2.0 download 선행)
 
 export TORCH_INSTALL=/home/iram/Downloads/torch-2.3.0-cp310-cp310-linux_aarch64.whl
 
-## PATH 환경변수 설정
+### PATH 환경변수 설정
 
 echo 'export PATH=$PATH:/home/iram/.local/bin' >> ~/.bashrc
 source ~/.bashrc
 
-## onnx install
+### onnx install
 
 python3 -m pip install onnx==1.14.1
 
-## Pytorch install
+### Pytorch install
 
 python3 -m pip install --upgrade pip; python3 -m pip install numpy==1.26.1; python3 -m pip install --no-cache $TORCH_INSTALL
+
+## 2. torch2trt install
+
+### install the torch2trt Python library
+git clone https://github.com/NVIDIA-AI-IOT/torch2trt
+cd torch2trt
+python setup.py install --user
+
+## 3. Install NVIDIA TensorRT(jetpack sdk 설치할때 자동 설치=> 생략)
+
+## 4. Install the Transformers library
+
+python3 -m pip install transformers
