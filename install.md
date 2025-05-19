@@ -59,9 +59,9 @@ sudo apt install ros-humble-ros-base
 
 sudo apt install ros-dev-tools
 
-# Install the dependencies
+# NanoOWL Setup(Install the dependencies)
 
-## 1. Pytorch install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
+## 1. Pytorch & torchvision install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
 
 sudo apt-get -y update; 
 sudo apt-get install -y  python3-pip libopenblas-dev;
@@ -82,6 +82,10 @@ python3 -m pip install onnx==1.14.1
 ### Pytorch install
 
 python3 -m pip install --upgrade pip; python3 -m pip install numpy==1.26.1; python3 -m pip install --no-cache $TORCH_INSTALL
+
+### torchvision install
+
+
 
 ## 2. torch2trt install
 
