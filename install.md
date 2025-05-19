@@ -59,6 +59,8 @@ sudo apt install ros-humble-ros-base
 
 sudo apt install ros-dev-tools
 
+
+
 # NanoOWL Setup(Install the dependencies)
 
 ## 1. Pytorch & torchvision install- Jetpack 6.0(https://docs.nvidia.com/deeplearning/frameworks/install-pytorch-jetson-platform/index.html 사이트 참고) 
@@ -126,3 +128,22 @@ python3 owl_predict.py \
     --image_encoder_engine=../data/owl_image_encoder_patch32.engine
 
 # NanoSAM Setup(Install the dependencies)
+
+## (optional) Install TRTPose - For the pose example.
+
+git clone https://github.com/NVIDIA-AI-IOT/trt_pose
+cd trt_pose
+python3 setup.py develop --user
+
+## (optional) Install the Transformers library - For the OWL ViT example.
+
+cd nanosam
+python3 -m pip install transformers
+
+
+# Install the NanoSAM Python package
+
+cd ~
+git clone https://github.com/NVIDIA-AI-IOT/nanosam
+cd nanosam
+python3 setup.py develop --user
