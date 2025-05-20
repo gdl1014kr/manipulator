@@ -1,6 +1,6 @@
 # KGNv2: Separating Scale and Pose Prediction for Keypoint-based 6-DoF Grasp Synthesis on RGB-D input
 
-기존 방식: keypoint(2d)들의 상대적인 위치로부터 grasp pose(3d)의 scale( 6자유도(6-DoF) 파지 자세의 위치(translation) 벡터 크기, 
+기존 방식(KGN): keypoint(2d)들의 상대적인 위치로부터 grasp pose(3d)의 scale( 6자유도(6-DoF) 파지 자세의 위치(translation) 벡터 크기, 
 즉 카메라 원점부터 해당 파지 자세의 원점까지의 3차원 공간 거리)와 회전 동시 추정
 => keypoint 예측의 작은 오차에도 스케일 추정이 불안정 해지는 문제, image 공간에서 keypoint position을 얼마나 정확하게 예측하는지에 크게 의존하게 됨. 특히 keypoint prediction 시 발생하는 sensor noise가 Perspective-n-Point(PnP) algorithm을 사용한 3D grasp pose 추정에 악영향.
 
@@ -46,7 +46,6 @@ CenterNet 등에서 영감을 받은 keypoint detector를 사용해 이미지 �
 Scale-normalized keypoint 설계로 keypoint 오프셋을 스케일로 나누어, 노이즈가 스케일에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
 별도의 네트워크 분기에서 카메라-그립퍼 간 거리를 스케일로 회귀 예측하고, 이를 PnP 결과에 곱해 위치 보정을 수행하며, 동시에 그립퍼 open width를 예측해 최종 파지 실행에 필요한 모두 정보를 예측함.  
 학습에는 focal loss, L1 regression loss 등 다양한 손실 함수를 조합하여 다중 출력 학습이 이루어짐.
-
 네트워크는 입력 이미지에서 그립퍼의 특정 특징점(keypoint)의 2D 이미지 공간 위치를 예측합니다. CenterNet과 같은 최신 keypoint 탐지 기법에서 영감을 받았으며, 이미지 내 다수의 파지 후보를 동시에 탐지할 수 있습니다.
 예측된 2D 키포인트와 그립퍼 모델에 미리 정의된 3D 키포인트 좌표를 사용하여 PnP(Perspective-n-Point) 알고리즘을 적용합니다. 이 과정에서 카메라 내부 파라미터(camera intrinsic parameters)를 활용하여 카메라 좌표계 기준의 3D rotation과 translation(스케일 제외)을 복원합니다.
 PnP 결과에 대한 노이즈 민감도를 줄이기 위해 스케일 정규화된 키포인트(Scale-normalized keypoint) 설계를 도입했습니다. 이는 키포인트 오프셋을 스케일로 나누어, 노이즈의 영향이 거리에 따라 감소하도록 합니다.
