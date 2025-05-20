@@ -1,3 +1,5 @@
+KGNv2: Separating Scale and Pose Prediction for Keypoint-based 6-DoF Grasp Synthesis on RGB-D input
+
 KGNv2 - 6-DoF(위치 x,y,z 회전 roll,pitch, yaw) grasp method. GraspNet, KGN 개선 버전. grasp pose 예측 정확도 향상 목표. 
 3차원 공간에서의 완전한 grasp pose 생성 목표
 
@@ -58,7 +60,6 @@ sim-to real 검증, 높은 grasp 성공률
 학습 데이터셋에 실제와 유사한 다양한 질감을 추가하는 방안을 모색 가능
 
 -----------------------------------------------------------------------------------------------------
-modify
 1. Abstract (초록)
 
 KGNv2는 RGB-D 이미지를 입력으로 받아 6-DoF(3D 위치와 3D 회전) grasp pose를 예측하는 네트워크로, 기존 KGN 대비 grasp 성공률이 약 5% 향상되는 등 성능이 크게 개선됨.  
@@ -73,12 +74,10 @@ keypoint - 객체나 로봇 그리퍼의 특정 지점(키포인트)을 이미�
 
 즉, RGB-D image를 사용해 로봇이 물체를 잡을 수 있는 완전한 3차원 자세(6-DoF grasp pose) 찾음
 
-
 input: RGB-D(2D RGB image + 3D Depth image), output: keypoint 검출을 통한 6-DoF grasp pose & gripper open width prediction
 연구자들은 2D/2.5D 입력에서 키포인트를 기반으로 한 새로운 6-DoF 그래스프 포즈 합성 접근 방식을 제안했습니다. 이미지 입력을 사용한 키포인트 기반 그래스프 감지 방법은 이전 연구에서 유망한 결과를 보여주었지만, 이미지 공간에서 키포인트의 정확한 위치 예측에 크게 의존합니다. 이러한 문제를 해결하기 위해 정확한 키포인트 예측에 대한 의존성을 줄이는 새로운 그래스프 생성 네트워크를 개발했습니다.
 
 KGNv2는 RGB-D 입력이 주어지면 키포인트 감지를 통한 그래스프 포즈와 카메라 방향의 스케일을 모두 예측합니다. 또한 키포인트 출력 공간을 재설계하여 Perspective-n-Point(PnP) 알고리즘에 대한 키포인트 예측 노이즈의 부정적 영향을 완화했습니다. 이러한 간단한 수정은 실험에서 기준 모델인 KGN보다 크게 향상된 성능을 보여주었으며, 단순한 합성 객체로만 훈련했음에도 실제 물체와 환경에서 잘 일반화됨을 입증했습니다.
-
 
 2. Method (방법론)
 
