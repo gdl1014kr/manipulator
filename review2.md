@@ -47,7 +47,7 @@ keypoint 검출을 통한 6-DoF grasp pose & gripper open width prediction
 
 input: RGB-D image
 
-입력은 RGB와 Depth 정보가 포함된 RGB-D 이미지이며, CenterNet 등에서 영감을 받은 keypoint detector를 사용해 이미지 내 다수 grasp 후보의 keypoint 위치를 동시에 예측함.  
+CenterNet 등에서 영감을 받은 keypoint detector를 사용해 이미지 내 다수 grasp 후보의 keypoint 위치를 동시에 예측함.  
 그립퍼 모델에 대응하는 3D keypoint 좌표와 네트워크가 예측한 2D keypoint 좌표를 PnP 알고리즘에 적용해 카메라 내장 행렬(intrinsic parameters)을 이용해 rotation과 translation(스케일 제외)을 복원.  
 Scale-normalized keypoint 설계로 keypoint 오프셋을 스케일로 나누어, 노이즈가 스케일에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
 별도의 네트워크 분기에서 카메라-그립퍼 간 거리를 스케일로 회귀 예측하고, 이를 PnP 결과에 곱해 위치 보정을 수행하며, 동시에 그립퍼 open width를 예측해 최종 파지 실행에 필요한 모두 정보를 예측함.  
@@ -81,8 +81,6 @@ PnP 알고리즘을 사용할 때 키포인트 예측 노이즈가 자세 추정
 
 6. 노이즈에 취약한 PnP 기반 6-DoF 추정을 안정화하기 위해 keypoint 표현을 스케일 정규화 방식으로 개선함으로써 자세 추정의 신뢰도를 높임.
 7. Point cloud로 변환하는 과정 없이 RGB-D 이미지로부터 직접 6-DoF grasp pose와 gripper open width를 예측해 효율성과 계산 속도 개선
-
-실험 결과, 제안된 방법이 기준 모델(baseline)보다 훨씬 뛰어난 성능을 보이며, 특히 파지 성공률이 약 5% 향상되는 등 그 설계의 유효성을 입증했습니다.
 
 ## Conclusion
 
