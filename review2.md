@@ -4,9 +4,7 @@
 즉 카메라 원점부터 해당 파지 자세의 원점까지의 3차원 공간 거리)와 회전 동시 추정
 => keypoint 예측의 작은 오차에도 스케일 추정이 불안정 해지는 문제, image 공간에서 keypoint position을 얼마나 정확하게 예측하는지에 크게 의존하게 됨. 특히 keypoint prediction 시 발생하는 sensor noise가 Perspective-n-Point(PnP) algorithm을 사용한 3D grasp pose 추정에 악영향.
 
-
 기존 방식과의 차이점: 4-dof의 평면 파지가 아닌 6-dof 파지 가능. point cloud 기반 파지 방식이 아닌 image 기반 keypoint 방식(RGB-D에서 2D keypoint 예측하여 찾음. -> 예측된 2D keypoint와 gripper에 미리 정의된 3D keypoint를 사용하여 pnp 알고리즘으로 카메라 좌표계 상에서의 3D grasp pose(위치 및 회전 정보) 추론. -> 카메라 좌표계를 로봇 좌표계로 변환-> 네트워크가 별도로 예측한 scale(카메라-파지 자세 간의 거리)을 회귀적으로 예측하여 pnp 추론 결과에 곱해 최종 위치 보정 수행 -> 최종적인 6-dof 파지 자세 결정, gripper open width 예측
-
 =>but, KGNv2는 이를 별도의 네트워크로 분리하여 grasp pose 추정의 정확도를 높임. => Keypoint의 의존성 낮춤
 
 + 기존 방식과 달리 input data를 point cloud와 같은 명시적인 3D 표현으로 변환하는 과정을 거치지 않고 직접 파지 자세 추정
