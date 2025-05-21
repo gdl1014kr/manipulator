@@ -1,7 +1,6 @@
 # KGNv2: Separating Scale and Pose Prediction for Keypoint-based 6-DoF Grasp Synthesis on RGB-D input
 
-기존 방식(KGN): keypoint(2d)들의 상대적인 위치로부터 grasp pose(3d)의 scale( 6자유도(6-DoF) 파지 자세의 위치(translation) 벡터 크기, 
-즉 카메라 원점부터 해당 파지 자세의 원점까지의 3차원 공간 거리)와 회전 동시 추정
+기존 방식(KGN): keypoint(2d)들의 상대적인 위치로부터 grasp pose(3d)와 scale(카메라 원점부터 해당 grasp pose의 원점까지의 3차원 공간 거리)와 회전 동시 추정
 
 => keypoint 예측의 작은 오차에도 스케일 추정이 불안정 해지는 문제, image 공간에서 keypoint position을 얼마나 정확하게 예측하는지에 크게 의존하게 됨. 특히 keypoint prediction 시 발생하는 sensor noise가 Perspective-n-Point(PnP) algorithm을 사용한 3D grasp pose 추정에 악영향.
 
@@ -27,7 +26,7 @@ RGB-D 기반은 처리 속도가 빨라 실시간에 적합. On-device에서 자
 ## Abstract
 
 KGNv2- GraspNet, KGN 개선 버전. 6-DoF grasp method. Keypoint 기반 grasp pose(회전 및 방향) 추정. Keypoint로 부터 grasp pose의 scale(거리)은 별도의 네트워크를 통해 독립적으로 예측.   grasp pose 예측 정확도 향상 목표.  3차원 공간에서의 완전한 grasp pose 생성 목표,  키포인트 표현 방식 개선을 통해 PnP 알고리즘 기반 자세 복원의 안정성을 높임.
-keypoint - 객체나 로봇 그리퍼의 특정 지점(키포인트)을 이미지 상에서 먼저 찾고, 이 키포인트 정보를 바탕으로 3차원 파지 자세를 계산하는 방식
+keypoint - 객체나 로봇 그리퍼의 특정 지점(키포인트)을 이미지 상에서 먼저 찾고, 이 키포인트 정보를 바탕으로 3D grasp pose를 계산하는 방식
 파지 합성- 로봇이 물체를 성공적으로 잡을 수 있는 6-DoF grasp pose를 찾아내거나 생성하는 과정.
 
 input: RGB-D(2D RGB image + 3D Depth image) => image 공간에서 추출된 특정 지점을 나타내는 keypoint를 통해 grasp pose & Scale(카메라의 시점에서 grasp 하려는 물체까지의 3D 공간 상의 절대적인 거리. 즉, grasp pose의 기준점이 카메라 원점으로부터 3차원 공간 상에서 얼마나 떨어져 있는지를 나타내는 값 별도 추정)
