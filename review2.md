@@ -1,6 +1,6 @@
 # KGNv2: Separating Scale and Pose Prediction for Keypoint-based 6-DoF Grasp Synthesis on RGB-D input
 
-기존 방식(KGN): 2D keypoint(image 또는 3d 모델(공간정보)에서 특정 지점을 나타내는 특징점. 특정 grasp pose에 있을 때 그리퍼의 주요 부분(또는 그리퍼에 정의된 가상점)이 카메라 이미지 상에 어디에 나타날지를 예측하는 지점.) 들의 상대적인 위치로부터 3D grasp pose와 scale(카메라 원점부터 해당 grasp pose의 원점까지의 3차원 공간 거리)와 동시 추정
+기존 방식(KGN): 2D keypoint(input image를 통해 grasp 하려는 지점을 표시) 들의 상대적인 위치로부터 3D grasp pose와 scale(카메라 원점부터 해당 grasp pose의 원점까지의 3차원 공간 거리)와 동시 추정
 
 => 
 - keypoint 예측의 작은 오차에도 Scale 추정이 불안정.
