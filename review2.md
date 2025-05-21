@@ -27,11 +27,10 @@ RGB-D 기반은 처리 속도가 빨라 실시간에 적합. On-device에서 자
 ## Abstract
 
 KGNv2- GraspNet, KGN 개선 버전. 6-DoF grasp method. Keypoint로 부터 grasp pose(회전 및 방향)의 scale(거리)은 별도의 네트워크를 통해 독립적으로 예측. 3차원 공간에서의 완전한 grasp pose 생성 목표, keypoint 표현 방식 개선을 통해 PnP Algorithm 기반 자세 복원의 안정성을 높임.
-keypoint - 객체나 로봇 그리퍼의 특정 지점(keypoint)을 이미지 상에서 먼저 찾고, keypoint 정보를 바탕으로 3D grasp pose를 계산하는 방식
 
 input: RGB-D(2D RGB image + 3D Depth image) => image 공간에서 추출된 특정 지점을 나타내는 keypoint를 통해 grasp pose & Scale(카메라의 시점에서 grasp 하려는 물체까지의 3D 공간 상의 절대적인 거리. 즉, grasp pose의 기준점이 카메라 원점으로부터 3차원 공간 상에서 얼마나 떨어져 있는지를 나타내는 값 별도 추정)
 output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(위치 x,y,z 회전 roll,pitch, yaw) 추정 & gripper open width
-=> keypoint 검출을 통한 6-DoF grasp pose & gripper open width prediction
+=> keypoint 검출을 통한 6-DoF grasp pose & gripper open width prediction(객체나 로봇 그리퍼의 특정 지점(keypoint)을 input된 image에서 먼저 찾고, keypoint 정보를 바탕으로 3D grasp pose를 계산하는 방식)
 
 --------------------
 ## Method
@@ -39,7 +38,6 @@ output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(�
 - Scale-normalized keypoint 설계로 keypoint offset을 Scale로 나누어, noise가 Scale에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
 - 별도의 네트워크를 통해 Scale 회귀 예측. 이를 PnP 결과에 곱해 위치 보정을 수행하며, gripper open width를 예측.
 - PnP 결과에 대한 noise 민감도를 줄이기 위해 Scale-normalized keypoint 설계 도입. => keypoint offset을 Scale로 나누어, noise의 영향이 거리에 따라 감소.
-- 네트워크는 파지 자세와 별도로 Scale & gripper open width를 회귀(regression) 방식으로 예측.
 - PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱하여 최종적인 카메라 좌표계 상에서의 6-DoF grasp pose(완전한 위치 및 회전)를 결정.(이후 카메라 좌표계 -> 로봇 좌표계 변환)
 
   => 최종적으로 예측된 6-DoF grasp pose와 gripper open width로 물체를 grasp. 
