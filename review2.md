@@ -34,14 +34,14 @@ output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(�
 --------------------
 ## Method
 
-Scale-normalized keypoint 설계로 keypoint offset을 Scale로 나누어, noise가 Scale에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
-별도의 네트워크 분기에서 카메라-그립퍼 간 거리를 스케일로 회귀 예측하고, 이를 PnP 결과에 곱해 위치 보정을 수행하며, 동시에 그립퍼 open width를 예측해 최종 파지 실행에 필요한 모두 정보를 예측함.  
-학습에는 focal loss, L1 regression loss 등 다양한 손실 함수를 조합하여 다중 출력 학습이 이루어짐.
-PnP 결과에 대한 noise 민감도를 줄이기 위해 Scale-normalized keypoint 설계 도입. => keypoint offset을 Scale로 나누어, noise의 영향이 거리에 따라 감소.
-네트워크는 파지 자세와 별도로 Scale & gripper open width를 회귀(regression) 방식으로 예측.
-PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱하여 최종적인 카메라 좌표계 상에서의 6-DoF grasp pose(완전한 위치 및 회전)를 결정.(이후 카메라 좌표계 -> 로봇 좌표계 변환)
-최종적으로 예측된 6-DoF grasp pose와 gripper open width는 로봇이 물체를 grasp 하는 데 사용. 
-학습은 keypoint heatmap, offset, scale, open width 예측에 대한 손실 함수를 결합하여 수행.
+- Scale-normalized keypoint 설계로 keypoint offset을 Scale로 나누어, noise가 Scale에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
+- 별도의 네트워크 분기에서 카메라-그립퍼 간 거리를 스케일로 회귀 예측하고, 이를 PnP 결과에 곱해 위치 보정을 수행하며, 동시에 그립퍼 open width를 예측해 최종 파지 실행에 필요한 모두 정보를 예측함.  
+- 학습에는 focal loss, L1 regression loss 등 다양한 손실 함수를 조합하여 다중 출력 학습이 이루어짐.
+- PnP 결과에 대한 noise 민감도를 줄이기 위해 Scale-normalized keypoint 설계 도입. => keypoint offset을 Scale로 나누어, noise의 영향이 거리에 따라 감소.
+- 네트워크는 파지 자세와 별도로 Scale & gripper open width를 회귀(regression) 방식으로 예측.
+- PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱하여 최종적인 카메라 좌표계 상에서의 6-DoF grasp pose(완전한 위치 및 회전)를 결정.(이후 카메라 좌표계 -> 로봇 좌표계 변환)
+- 최종적으로 예측된 6-DoF grasp pose와 gripper open width는 로봇이 물체를 grasp 하는 데 사용. 
+- 학습은 keypoint heatmap, offset, scale, open width 예측에 대한 손실 함수를 결합하여 수행.
 
 ## Contribution 
   
@@ -63,10 +63,8 @@ PnP Algorithm을 사용할 때 keypoint 예측 noise가 자세 추정에 미치�
 KGNv2: 
 - 요약: RGB-D image를 input으로 받아 6-DoF grasp pose 추정
 - 방법론: image에서 keypoint detection 및 PnP Algorithm을 사용하여 파지 자세 추정(Scale & gripper open width는 분리된 네트워크로 별도 regress하여 예측)
-- 개선점 및 효과 : PnP 알고리즘에 대한 분석을 바탕으로 Scale-normalized keypoint 디자인 도입 => grasp pose 추정 정확도 높임.
-
+- 개선점 및 효과 : PnP Algorithm에 대한 분석을 바탕으로 Scale-normalized keypoint 디자인 도입 => grasp pose 추정 정확도 높임.
 - 검증: 합성 데이터셋을 사용한 실험에서 KGN2가 기존 KGN 방식보다 label로부터 grasp 분포 더 잘 학습. sim-to real 검증, 높은 grasp 성공률
-
 -한계: 실제 실험에서 단일 객체 파지 시 불안정한 자세 예측이나 네트워크의 부적절한 외삽으로 인한 가려진 영역 파지 시도 등 실패 사례 발생.이는 특정 객체의 형태, 미끄러운 표면, 또는 복잡한 시각적 환경에 대한 네트워크의 한계를 시사.
 -향후 연구 방향: 향후 연구로는 생성 모델(diffusion model, TEXTure 등)을 활용하여 학습 데이터셋에 실제와 유사한 다양한 질감을 추가하는 방안을 모색 가능
 특히, 스케일 예측을 분리하고 스케일 정규화 키포인트 디자인을 도입함으로써 PnP 알고리즘 기반 자세 추정의 정확도를 크게 향상시켰습니다.
