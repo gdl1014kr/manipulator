@@ -31,9 +31,6 @@ output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(�
 --------------------
 ## Method
 
-input: RGB-D image
-CenterNet 등에서 영감을 받은 keypoint detector를 사용해 이미지 내 다수 grasp 후보의 keypoint 위치를 동시에 예측함.  
-예측된 2D keypoint와 gripper에 미리 정의된 3D keypoint를 사용하여 pnp 알고리즘 적용. 카메라 내부 파라미터를 이용해 rotation과 translation(스케일 제외)을 복원.  
 Scale-normalized keypoint 설계로 keypoint 오프셋을 스케일로 나누어, 노이즈가 스케일에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
 별도의 네트워크 분기에서 카메라-그립퍼 간 거리를 스케일로 회귀 예측하고, 이를 PnP 결과에 곱해 위치 보정을 수행하며, 동시에 그립퍼 open width를 예측해 최종 파지 실행에 필요한 모두 정보를 예측함.  
 학습에는 focal loss, L1 regression loss 등 다양한 손실 함수를 조합하여 다중 출력 학습이 이루어짐.
