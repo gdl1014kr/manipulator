@@ -49,11 +49,12 @@ output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(�
   
 1. 네트워크 분리를 통한 Scale & grasp pose 별도 예측 => 기존 KGN 대비 grasp 성공률 약 5% 향상, Keypoint의 의존성 낮춤
 
-기존 keypoint 기반 접근 방식의 한계(grasp pose의 scale과 회전/위치를 동시에 추정하며 발생하는 불안정성과 grasp 정확도 저하)를 극복하기 위해 grasp pose 추정 문제를 scale과 자세 예측으로 분리하고, pnp algorithm의 noise 민감성을 줄이기 위해 keypoint 표현 방식 개선, 기존 KGN의 단점을 보완하여 grasp pose 예측의 정확도 향상
+기존 keypoint 기반 접근 방식의 한계(grasp pose의 scale과 회전/위치를 동시에 추정하며 발생하는 불안정성과 grasp 정확도 저하)를 극복하기 위해 grasp pose 추정 문제를 Scale과 자세 예측으로 분리.
 
 2. Scale-normalized keypoint 설계
-keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. PnP Algorithm에 대한 수치 분석을 통해 Scale ㅎgrasp pose(카메라에서 더 멀리 있는 포즈)가 노이즈에 더 민감하다는 것을 발견하고, 이를 해결하기 위한 설계를 제안했습니다.
+
 PnP Algorithm을 사용할 때 keypoint 예측 noise가 자세 추정에 미치는 악영향을 줄이기 위해 Scale-normalized keypoint 표현 방식 사용.
+keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. PnP Algorithm에 대한 수치 분석을 통해 Scale ㅎgrasp pose(카메라에서 더 멀리 있는 포즈)가 노이즈에 더 민감하다는 것을 발견.
 -> 성능향상
 
 3. 단순 합성 데이터만으로도 실제 환경에 일반화 가능한 sim-to-real 성능을 입증
