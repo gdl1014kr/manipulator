@@ -16,7 +16,7 @@ keypoint - image 또는 3d 모델(공간정보)에서 특정 지점을 나타내
 RGB-D image를 input으로, 로봇이 물체를 안정적으로 잡을 수 있는 6-DoF grasp pose(3D 공간에서의 물체의 위치(x,y,z)와 방향(roll,pitch, yaw)와 gripper open width 찾음.
 
 우리 프로젝트에는 RGB-D 기반이 적합. => point cloud 방식은 point cloud에서 기하학적 정보를 추출하는데 처리 시간이 오래걸림. 
-RGB-D 기반은 처리 속도가 빨라 실시간에 적합. On-device에서 자연어 기반 실시간 object detection & grasp 하려는 contribution에 일치.  소규모 객체나 시각적 구별이 중요한 객체에 적합. 밝은 환경(실험실)에서 진행하기 때문.
+RGB-D 기반은 처리 속도가 빨라 실시간에 적합. On-device에서 자연어 기반 실시간 object detection & grasp 하려는 contribution에 일치.  
 
 -----------------------------------------------------------------------------------------------------
 ## Abstract
@@ -33,12 +33,12 @@ output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(�
 
 input: RGB-D image
 CenterNet 등에서 영감을 받은 keypoint detector를 사용해 이미지 내 다수 grasp 후보의 keypoint 위치를 동시에 예측함.  
-그립퍼 모델에 대응하는 3D keypoint 좌표와 네트워크가 예측한 2D keypoint 좌표를 PnP 알고리즘에 적용해 카메라 내장 행렬(intrinsic parameters)을 이용해 rotation과 translation(스케일 제외)을 복원.  
+예측된 2D keypoint와 gripper에 미리 정의된 3D keypoint를 사용하여 pnp 알고리즘 적용. 카메라 내부 파라미터를 이용해 rotation과 translation(스케일 제외)을 복원.  
 Scale-normalized keypoint 설계로 keypoint 오프셋을 스케일로 나누어, 노이즈가 스케일에 반비례해 감소하는 수학적 특성으로 자세 추정 오차를 줄임.  
 별도의 네트워크 분기에서 카메라-그립퍼 간 거리를 스케일로 회귀 예측하고, 이를 PnP 결과에 곱해 위치 보정을 수행하며, 동시에 그립퍼 open width를 예측해 최종 파지 실행에 필요한 모두 정보를 예측함.  
 학습에는 focal loss, L1 regression loss 등 다양한 손실 함수를 조합하여 다중 출력 학습이 이루어짐.
 PnP 결과에 대한 noise 민감도를 줄이기 위해 Scale-normalized keypoint 설계 도입. => keypoint offset을 Scale로 나누어, noise의 영향이 거리에 따라 감소.
-네트워크는 파지 자세와 별도로 카메라-그립퍼 간의 거리인 **스케일(scale)**과 그립퍼의 벌림 정도인 **오픈 너비(open width)**를 회귀(regression) 방식으로 예측합니다.
+네트워크는 파지 자세와 별도로 Scale & gripper open width를 회귀(regression) 방식으로 예측.
 PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱하여 최종적인 카메라 좌표계 상에서의 6-DoF grasp pose(완전한 위치 및 회전)를 결정.
 최종적으로 예측된 6-DoF grasp pose와 gripper open width는 로봇이 물체를 grasp 하는 데 사용. 로봇 제어를 위해서는 카메라 좌표계 자세를 로봇 좌표계로 변환하는 과정이 필요합니다.
 학습은 keypoint heatmap, offset, scale, open width 예측에 대한 손실 함수를 결합하여 수행.
