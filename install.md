@@ -218,12 +218,3 @@ conda init
 conda create -n kgn python=3.10
 conda activate kgn
 
-## Miniforge download
-cd ~/Downloads
-wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh
-chmod +x Miniforge3-Linux-aarch64.sh
-./Miniforge3-Linux-aarch64.sh
-
-
-source ~/miniforge3/bin/activate
-conda init
