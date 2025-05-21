@@ -48,7 +48,7 @@ PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱
 
 2. Scale-normalized keypoint 설계
 keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. PnP 알고리즘에 대한 수치 분석을 통해 스케일이 큰 그래스프 포즈(카메라에서 더 멀리 있는 포즈)가 노이즈에 더 민감하다는 것을 발견하고, 이를 해결하기 위한 설계를 제안했습니다.
-PnP 알고리즘을 사용할 때 키포인트 예측 노이즈가 자세 추정에 미치는 악영향을 줄이기 위해 스케일 정규화된 키포인트 표현 방식을 제안하고 그 효과를 실험적으로 입증했습니다.
+PnP Algorithm을 사용할 때 keypoint 예측 noise가 자세 추정에 미치는 악영향을 줄이기 위해 Scale-normalized keypoint 표현 방식 사용.
 -> 성능향상
 
 3. 단순 합성 데이터만으로도 실제 환경에 일반화 가능한 sim-to-real 성능을 입증
