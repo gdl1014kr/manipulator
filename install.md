@@ -197,3 +197,33 @@ python3 -m nanosam.tools.export_sam_mask_decoder_onnx \
 ## 3. PATH에 trtexec 경로 추가
 echo 'export PATH=$PATH:/usr/src/tensorrt/bin' >> ~/.bashrc
 source ~/.bashrc
+
+
+-----------------------------------------
+
+# KGN install
+
+
+
+## anaconda install(miniconda)
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh \
+  -O ~/Miniconda3-latest-Linux-aarch64.sh
+  
+chmod +x ~/Miniconda3-latest-Linux-aarch64.sh
+bash ~/Miniconda3-latest-Linux-aarch64.sh
+
+source ~/miniconda3/bin/activate
+conda init
+
+conda create -n kgn python=3.10
+conda activate kgn
+
+## Miniforge download
+cd ~/Downloads
+wget https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-aarch64.sh
+chmod +x Miniforge3-Linux-aarch64.sh
+./Miniforge3-Linux-aarch64.sh
+
+
+source ~/miniforge3/bin/activate
+conda init
