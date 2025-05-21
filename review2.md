@@ -1,6 +1,6 @@
 # KGNv2: Separating Scale and Pose Prediction for Keypoint-based 6-DoF Grasp Synthesis on RGB-D input
 
-기존 방식(KGN): 2D keypoint(input image를 통해 grasp 하려는 지점을 표시) 들의 상대적인 위치로부터 3D grasp pose와 scale(카메라 원점부터 해당 grasp pose의 원점까지의 3차원 공간 거리)와 동시 추정
+기존 방식(KGN): 2D keypoint(input image를 통해 grasp 하려는 지점을 표시) 들의 상대적인 위치로부터 3D grasp pose와 scale(카메라 원점부터 해당 grasp pose의 원점까지의 3차원 공간 거리) 동시 추정
 
 => 
 - keypoint 예측의 작은 오차에도 Scale 추정이 불안정.
@@ -23,7 +23,7 @@ RGB-D 기반은 처리 속도가 빨라 실시간에 적합. On-device에서 자
 
 => contribution을 입증하기 위해 point-cloud 방식, RGB-D 방식 모두 사용하여 성능 비교해볼 예정.
 
------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 ## Abstract
 
 KGNv2- GraspNet, KGN 개선 버전. 6-DoF grasp method. Keypoint로 부터 grasp pose(회전 및 방향)의 scale(거리)은 별도의 네트워크를 통해 독립적으로 예측. 3차원 공간에서의 완전한 grasp pose 생성 목표, keypoint 표현 방식 개선을 통해 PnP Algorithm 기반 자세 복원의 안정성을 높임.
@@ -52,7 +52,6 @@ output: grasp 중심, keypoint 위치, scale 예측을 통한 6-DoF grasp pose(�
 
 PnP Algorithm을 사용할 때 keypoint 예측 noise가 자세 추정에 미치는 악영향을 줄이기 위해 Scale-normalized keypoint 표현 방식 사용. Scale이 클수록 noise에 민감
 keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. 
--> 성능향상
 
 3. 단순 합성 데이터만으로도 실제 환경에 일반화 가능한 sim-to-real 성능을 입증
 
