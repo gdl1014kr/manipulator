@@ -39,8 +39,8 @@ Scale-normalized keypoint 설계로 keypoint 오프셋을 스케일로 나누어
 학습에는 focal loss, L1 regression loss 등 다양한 손실 함수를 조합하여 다중 출력 학습이 이루어짐.
 PnP 결과에 대한 noise 민감도를 줄이기 위해 Scale-normalized keypoint 설계 도입. => keypoint offset을 Scale로 나누어, noise의 영향이 거리에 따라 감소.
 네트워크는 파지 자세와 별도로 Scale & gripper open width를 회귀(regression) 방식으로 예측.
-PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱하여 최종적인 카메라 좌표계 상에서의 6-DoF grasp pose(완전한 위치 및 회전)를 결정.
-최종적으로 예측된 6-DoF grasp pose와 gripper open width는 로봇이 물체를 grasp 하는 데 사용. 로봇 제어를 위해서는 카메라 좌표계 자세를 로봇 좌표계로 변환하는 과정이 필요합니다.
+PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱하여 최종적인 카메라 좌표계 상에서의 6-DoF grasp pose(완전한 위치 및 회전)를 결정.(이후 카메라 좌표계 -> 로봇 좌표계 변환)
+최종적으로 예측된 6-DoF grasp pose와 gripper open width는 로봇이 물체를 grasp 하는 데 사용. 
 학습은 keypoint heatmap, offset, scale, open width 예측에 대한 손실 함수를 결합하여 수행.
 
 ## Contribution 
@@ -52,7 +52,6 @@ PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱
 2. Scale-normalized keypoint 설계
 keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. PnP 알고리즘에 대한 수치 분석을 통해 스케일이 큰 그래스프 포즈(카메라에서 더 멀리 있는 포즈)가 노이즈에 더 민감하다는 것을 발견하고, 이를 해결하기 위한 설계를 제안했습니다.
 PnP 알고리즘을 사용할 때 키포인트 예측 노이즈가 자세 추정에 미치는 악영향을 줄이기 위해 스케일 정규화된 키포인트 표현 방식을 제안하고 그 효과를 실험적으로 입증했습니다.
-제안된 두 가지 핵심 기술(스케일 분리 예측 및 스케일 정규화 키포인트)은 6-DoF 파지뿐만 아니라 다른 비전 기반 3D 자세 추정 문제에도 적용될 수 있는 잠재력을 가집니다.
 -> 성능향상
 
 3. 단순 합성 데이터만으로도 실제 환경에 일반화 가능한 sim-to-real 성능을 입증
