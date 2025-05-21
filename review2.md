@@ -5,18 +5,21 @@
 => keypoint 예측의 작은 오차에도 스케일 추정이 불안정 해지는 문제, image 공간에서 keypoint position을 얼마나 정확하게 예측하는지에 크게 의존하게 됨. 특히 keypoint prediction 시 발생하는 sensor noise가 Perspective-n-Point(PnP) algorithm을 사용한 3D grasp pose 추정에 악영향.
 
 KGNv2: (RGB-D에서 2D keypoint 예측하여 찾음. -> 예측된 2D keypoint와 gripper에 미리 정의된 3D keypoint를 사용하여 pnp 알고리즘 적용. 카메라 내부 파라미터를 활용하여 카메라 좌표계 기준의 3D grasp pose(위치 및 회전 정보) 추론. -> 카메라 좌표계를 로봇 좌표계로 변환-> 네트워크가 별도로 예측한 scale(카메라-파지 자세 간의 거리)을 회귀적으로 예측하여 pnp 추론 결과에 곱해 최종 위치 보정 수행 -> 최종적인 6-dof 파지 자세 결정, gripper open width 예측
-=>but, KGNv2는 이를 별도의 네트워크로 분리하여 grasp pose 추정의 정확도를 높임. => Keypoint의 의존성 낮춤
+
+=> KGNv2는 grasp pose와 Scale을 별도의 네트워크로 분리하여 grasp pose 추정의 정확도를 높임. => Keypoint의 의존성 낮춤
 RGB-D를 input data로 사용함으로써 depth image data의 sensor noise를 rgb로 보완.(robustness)
 
 keypoint - image 또는 3d 모델(공간정보)에서 특정 지점을 나타내는 특징점. 특정 파지 자세에 있을 때 그리퍼의 주요 부분(또는 그리퍼에 정의된 가상점)이 카메라 이미지 상에 어디에 나타날지를 예측하는 지점.
 
 - 6-dof pose method
-1. point- cloud 기반(GraspNet 등) => 소규모 객체에 대한 파지 성능 좋지 않음, Sensor noise에 취약, 실시간에 적합하지 x(계산 시간 오래 걸림- 계산 비용 증가)
+1. point- cloud 기반(GraspNet 등) => 소규모 객체에 대한 grasp 성능 저하, Sensor noise에 취약, 실시간에 적합하지 x(계산 시간 오래 걸림- 계산 비용 증가)
 2. RGB-D 기반(KGNv2 등) => 소규모 객체 더 정확한 구별, Sensor noise에 대한 robustness(강건함), 빠른 처리 속도
 RGB-D image를 input으로, 로봇이 물체를 안정적으로 잡을 수 있는 6-DoF grasp pose(3D 공간에서의 물체의 위치(x,y,z)와 방향(roll,pitch, yaw)와 gripper open width 찾음.
 
 우리 프로젝트에는 RGB-D 기반이 적합. => point cloud 방식은 point cloud에서 기하학적 정보를 추출하는데 처리 시간이 오래걸림. 
 RGB-D 기반은 처리 속도가 빨라 실시간에 적합. On-device에서 자연어 기반 실시간 object detection & grasp 하려는 contribution에 일치.  
+
+=> contribution을 입증하기 위해 point-cloud 방식, RGB-D 방식 모두 사용하여 성능 비교해볼 예정.
 
 -----------------------------------------------------------------------------------------------------
 ## Abstract
@@ -47,14 +50,13 @@ PnP 알고리즘으로 얻은 pose에 네트워크가 예측한 Scale 값을 곱
 기존 keypoint 기반 접근 방식의 한계(grasp pose의 scale과 회전/위치를 동시에 추정하며 발생하는 불안정성과 grasp 정확도 저하)를 극복하기 위해 grasp pose 추정 문제를 scale과 자세 예측으로 분리하고, pnp algorithm의 noise 민감성을 줄이기 위해 keypoint 표현 방식 개선, 기존 KGN의 단점을 보완하여 grasp pose 예측의 정확도 향상
 
 2. Scale-normalized keypoint 설계
-keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. PnP 알고리즘에 대한 수치 분석을 통해 스케일이 큰 그래스프 포즈(카메라에서 더 멀리 있는 포즈)가 노이즈에 더 민감하다는 것을 발견하고, 이를 해결하기 위한 설계를 제안했습니다.
+keypoint 출력 공간을 추정된 Scale로 normalization하도록 재설계하여 keypoint 오류에 대한 민감성을 줄이고 추정된 pose의 정밀도를 향상. PnP Algorithm에 대한 수치 분석을 통해 Scale ㅎgrasp pose(카메라에서 더 멀리 있는 포즈)가 노이즈에 더 민감하다는 것을 발견하고, 이를 해결하기 위한 설계를 제안했습니다.
 PnP Algorithm을 사용할 때 keypoint 예측 noise가 자세 추정에 미치는 악영향을 줄이기 위해 Scale-normalized keypoint 표현 방식 사용.
 -> 성능향상
 
 3. 단순 합성 데이터만으로도 실제 환경에 일반화 가능한 sim-to-real 성능을 입증
 
-4. 노이즈에 취약한 PnP 기반 6-DoF 추정을 안정화하기 위해 keypoint 표현을 Scale 정규화 방식으로 개선함으로써 자세 추정의 신뢰도를 높임.
-5. Point cloud로 변환하는 과정 없이 RGB-D 이미지로부터 직접 6-DoF grasp pose와 gripper open width를 예측해 효율성과 계산 속도 개선
+4. 기존 Point cloud 방식을 사용하지 않고 RGB-D image로부터 직접 6-DoF grasp pose와 gripper open width를 예측해 효율성과 계산 속도 개선
 
 ## Conclusion
 
