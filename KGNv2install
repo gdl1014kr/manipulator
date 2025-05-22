@@ -3,7 +3,7 @@
 
 ## anaconda install(miniconda) 
 
-### 설치 스크립트 다운로드
+### 설치 스크립트 다운로드 - ARM64(aarch64) 전용 스크립트
 
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-aarch64.sh \
   -O ~/Miniconda3-latest-Linux-aarch64.sh
@@ -27,3 +27,26 @@ conda activate kgn
 ## torchaudio install(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torchviaudio download 선행)
 
 python3 -m pip install --no-cache-dir ~/Downloads/torchaudio-2.3.0+952ea74-cp310-cp310-linux_aarch64.whl
+
+------------------------------------
+DCNv2_latest 클론 및 설치
+conda activate kgn
+export DCNv2_ROOT=~/workspace/DCNv2_latest
+
+# DCNv2_latest 저장소 클론
+git clone https://github.com/jinfagang/DCNv2_latest $DCNv2_ROOT  
+
+# 설치 및 빌드
+cd $DCNv2_ROOT
+python setup.py install --user
+
+# KGN 저장소 클론
+# KGN 설치 경로 지정
+export KGN_ROOT=~/workspace/KGN
+# KGN 저장소 클론
+git clone https://github.com/ivalab/KGN.git $KGN_ROOT  # KGN 메인 코드 클론:contentReference[oaicite:6]{index=6}
+
+# 작업 디렉터리로 이동
+cd $KGN_ROOT
+
+#파이썬 의존성 설치
