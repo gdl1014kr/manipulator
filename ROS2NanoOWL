@@ -32,3 +32,11 @@ cd ~/ros2_nanoowl_ws/src/nanoowl
 pip install .
 
 ##
+cd ros2_nanoowl_ws/src/nanoowl
+mkdir -p data
+python3 -m nanoowl.build_image_encoder_engine data/owl_image_encoder_patch32.engine
+
+
+##
+cp -r data/ ~/ros2_nanoowl_ws/src/ROS2-NanoOWL
+
