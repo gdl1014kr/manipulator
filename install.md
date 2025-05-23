@@ -266,6 +266,7 @@ cd $KGN_ROOT
 2
 
 DCNv2 clone & install
+
 export DCNv2_ROOT=~/ros2_nanoowl_ws/src/DCNv2_latest
 git clone https://github.com/jinfagang/DCNv2_latest $DCNv2_ROOT
 cd $DCNv2_ROOT
