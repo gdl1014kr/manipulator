@@ -215,6 +215,9 @@ CUDA Toolkit: 12.2
 
 1. Installation
 
+              
+
+
 ## Miniconda install - Jetson AGX Orin(JetPack 6.0, Ubuntu 22.04 aarch64)에서는 x86_64용 Anaconda 설치 스크립트 실행 시 illegal instruction 오류가 빈번히 발생하여
 공식적으로는 경량화된 Miniconda 설치를 권장
 
@@ -238,6 +241,14 @@ conda create -n kgn python=3.10
 
 ### 환경 활성화
 conda activate kgn
+
+sudo apt update
+sudo apt install -y libfcl-dev liboctomap-dev  # FCL 및 OctoMap 시스템 라이브러리 설치 :contentReference[oaicite:1]{index=1}
+
+conda config --add channels conda-forge
+conda config --set channel_priority strict
+conda install fcl                            
+pip install python-fcl        
 
 ## torchaudio install(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torchviaudio download 선행)
 
