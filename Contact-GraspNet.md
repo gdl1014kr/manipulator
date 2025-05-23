@@ -19,7 +19,13 @@ python -m pip install pillow
 export TF_INC=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
 export TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib())')
 
+## tf_sampling.cpp, tf_grouping.cpp, tf_interpolate.cpp 코드 수정
 
+각각의 코드에서 return Status::OK(); 부분을 return ::tensorflow::OkStatus();로 수정
+각각의 코드에서 .SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) { 부분을 
+.SetShapeFn([](::tensorflow::shape_inference::InferenceContext* c) -> ::tensorflow::Status {
+로 수정
 
 ## Recompile pointnet2 tf_ops
+
 sh compile_pointnet_tfops.sh
