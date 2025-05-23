@@ -56,11 +56,8 @@ cp ~/Downloads/scene_test_2048_bs3_hor_sigma_0025-20250523T155816Z-1-001.zip che
 
 ## Download Test data(https://drive.google.com/drive/folders/1TqpM2wHAAo0j3i1neu3Xeru3_WnsYQnx 해당 링크에서 파일 다운)
 
-mkdir test_data
-cp ~/Downloads/test_data-20250523T082527Z-1-001.zip test_data/
-cp ~/Downloads/ test_data/
-cp ~/Downloads/ test_data/
-cp ~/Downloads/ test_data/
+cp ~/Downloads/test_data-20250523T082527Z-1-001.zip ./
+
 
 ## unzip
 
@@ -69,8 +66,8 @@ unzip scene_2048_bs3_rad2_32-20250523T155812Z-1-001.zip
 unzip scene_test_2048_bs3_hor_sigma_001-20250523T155814Z-1-001.zip
 unzip scene_test_2048_bs3_hor_sigma_0025-20250523T155816Z-1-001.zip
 
-cd ../test_data/   && unzip test_data-20250523T082527Z-1-001.zip
-cd ..
+cd .. && unzip test_data-20250523T082527Z-1-001.zip
+
 
 ## package install
 
