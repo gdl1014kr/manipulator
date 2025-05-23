@@ -239,15 +239,6 @@ conda create -n kgn python=3.10
 ### 환경 활성화
 conda activate kgn
 
-
-### 라이브러리 설치
-sudo apt update
-sudo apt install -y libfcl-dev liboctomap-dev 
-conda config --add channels conda-forge
-conda config --set channel_priority strict
-conda install fcl                            
-pip install python-fcl        
-
 ## torchaudio install(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torchviaudio download 선행)
 
 python3 -m pip install --no-cache-dir ~/Downloads/torchaudio-2.3.0+952ea74-cp310-cp310-linux_aarch64.whl
@@ -274,6 +265,8 @@ pip install -r requirements.txt
 2. Demo
 
 # ros2_nanoowl_ws/src/KGN/exp 폴더에 kgnv2.pth 넣음. 
+mkdir exp
+
 # ros2_nanoowl_ws/src/KGN/src/lib/utils 의 keypoints.py 299번째 줄 return ori_cls.astype(np.int)를 return ori_cls.astype(int)로 수정
 
 bash experiments/demo_kgnv2.sh
