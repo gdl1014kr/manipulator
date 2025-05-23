@@ -201,9 +201,9 @@ source ~/.bashrc
 
 -----------------------------------------
 
-# KGN install
+# KGN 
 
-
+1. Installation
 
 ## Miniconda install - Jetson AGX Orin(JetPack 6.0, Ubuntu 22.04 aarch64)에서는 x86_64용 Anaconda 설치 스크립트 실행 시 illegal instruction 오류가 빈번히 발생하여
 공식적으로는 경량화된 Miniconda 설치를 권장
@@ -234,3 +234,29 @@ conda activate kgn
 python3 -m pip install --no-cache-dir ~/Downloads/torchaudio-2.3.0+952ea74-cp310-cp310-linux_aarch64.whl
 
 
+# KGN 설치 경로 지정
+export KGN_ROOT=~/workspace/KGN
+
+# KGN 저장소 클론
+git clone https://github.com/ivalab/KGN.git $KGN_ROOT  # KGN 메인 코드 클론:contentReference[oaicite:6]{index=6}
+
+# 작업 디렉터리로 이동
+cd $KGN_ROOT
+2
+
+DCNv2 clone
+export DCNv2_ROOT=~/ros2_nanoowl_ws/src/DCNv2_latest
+git clone https://github.com/jinfagang/DCNv2_latest $DCNv2_ROOT
+cd $DCNv2_ROOT
+python setup.py install --user
+
+
+KGN clone
+
+export KGN_ROOT=~/ros2_nanoowl_ws/src/KGN
+git clone https://github.com/ivalab/KGN.git $KGN_ROOT  # KGN 메인 코드 클론:contentReference[oaicite:6]{index=6}
+cd $KGN_ROOT
+pip install -r requirements.txt 
+
+
+2. Demo
