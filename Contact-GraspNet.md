@@ -37,6 +37,11 @@ export TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib()
 sh compile_pointnet_tfops.sh
 
 
+
+-------------------------
+conda config --set channel_priority flexible
+
+
 ## Download Models & copy(https://drive.google.com/drive/folders/1tBHKf60K8DLM5arm-Chyf7jxkzOr5zGl 해당 링크에서 contact_graspnet_train_and_test-20250523T082241Z-1-001.zip 파일 다운)
 
 cp ~/Downloads/contact_graspnet_train_and_test-20250523T082241Z-1-001.zip checkpoints/
@@ -57,4 +62,4 @@ cd ..
 conda install -c conda-forge opencv
 conda install -c conda-forge trimesh
 conda install -c conda-forge scipy
-
+conda install -c conda-forge pyrender pyopengl trimesh pyglet
