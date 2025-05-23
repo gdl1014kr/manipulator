@@ -82,5 +82,12 @@ conda install pyqt
 pip install mayavi
 
 
+## inference
+
+export CUDA_LAUNCH_BLOCKING=1
+python contact_graspnet/inference.py \
+  --np_path=test_data/*.npy \
+  --local_regions --filter_grasps
+
 
 
