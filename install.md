@@ -203,6 +203,16 @@ source ~/.bashrc
 
 # KGN 
 
+OS: Ubuntu 22.04 (JetPack 6.0)
+
+Python: 3.10 (conda env kgn)
+
+PyTorch: v2.3.0 (CUDA 12.2 런타임 포함)
+
+TorchVision: v0.18
+
+CUDA Toolkit: 12.2
+
 1. Installation
 
 ## Miniconda install - Jetson AGX Orin(JetPack 6.0, Ubuntu 22.04 aarch64)에서는 x86_64용 Anaconda 설치 스크립트 실행 시 illegal instruction 오류가 빈번히 발생하여
