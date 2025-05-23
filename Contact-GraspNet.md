@@ -56,4 +56,5 @@ cd ..
 
 conda install -c conda-forge opencv
 conda install -c conda-forge trimesh
+conda install -c conda-forge scipy
 
