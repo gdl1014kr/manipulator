@@ -35,3 +35,15 @@ export TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib()
 ## Recompile pointnet2 tf_ops
 
 sh compile_pointnet_tfops.sh
+
+
+## Download Models & copy(https://drive.google.com/drive/folders/1tBHKf60K8DLM5arm-Chyf7jxkzOr5zGl 해당 링크에서 contact_graspnet_train_and_test-20250523T082241Z-1-001.zip 파일 다운)
+
+cp ~/Downloads/contact_graspnet_train_and_test-20250523T082241Z-1-001.zip checkpoints/
+
+## Download Test data(https://drive.google.com/drive/folders/1TqpM2wHAAo0j3i1neu3Xeru3_WnsYQnx 해당 링크에서 test_data-20250523T082527Z-1-001.zip 파일 다운)
+
+mkdir test_data
+cp ~/Downloads/test_data-20250523T082527Z-1-001.zip test_data/
+
+
