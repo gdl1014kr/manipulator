@@ -254,7 +254,7 @@ python setup.py install --user
 KGN clone
 
 export KGN_ROOT=~/ros2_nanoowl_ws/src/KGN
-git clone https://github.com/ivalab/KGN.git $KGN_ROOT  # KGN 메인 코드 클론:contentReference[oaicite:6]{index=6}
+git clone https://github.com/ivalab/KGN.git $KGN_ROOT 
 cd $KGN_ROOT
 pip install -r requirements.txt 
 
