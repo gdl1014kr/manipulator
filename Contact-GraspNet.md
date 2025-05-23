@@ -36,24 +36,39 @@ export TF_LIB=$(python -c 'import tensorflow as tf; print(tf.sysconfig.get_lib()
 
 sh compile_pointnet_tfops.sh
 
+## config_utils.py 코드 수정
+global_config = yaml.load(f) 부분을 global_config = yaml.load(f, Loader=yaml.FullLoader)로 수정
+
+=>
+이유: Python의 PyYAML 5.1 버전부터는 yaml.load() 함수에 Loader 인자를 반드시 명시하도록 변경
 
 
 -------------------------
 conda config --set channel_priority flexible
 
 
-## Download Models & copy(https://drive.google.com/drive/folders/1tBHKf60K8DLM5arm-Chyf7jxkzOr5zGl 해당 링크에서 contact_graspnet_train_and_test-20250523T082241Z-1-001.zip 파일 다운)
+## Download Models & copy(https://drive.google.com/drive/folders/1tBHKf60K8DLM5arm-Chyf7jxkzOr5zGl 해당 링크에서 파일 다운)
 
 cp ~/Downloads/contact_graspnet_train_and_test-20250523T082241Z-1-001.zip checkpoints/
+cp ~/Downloads/scene_2048_bs3_rad2_32-20250523T155812Z-1-001.zip checkpoints/
+cp ~/Downloads/scene_test_2048_bs3_hor_sigma_001-20250523T155814Z-1-001.zip checkpoints/
+cp ~/Downloads/scene_test_2048_bs3_hor_sigma_0025-20250523T155816Z-1-001.zip checkpoints/
 
-## Download Test data(https://drive.google.com/drive/folders/1TqpM2wHAAo0j3i1neu3Xeru3_WnsYQnx 해당 링크에서 test_data-20250523T082527Z-1-001.zip 파일 다운)
+## Download Test data(https://drive.google.com/drive/folders/1TqpM2wHAAo0j3i1neu3Xeru3_WnsYQnx 해당 링크에서 파일 다운)
 
 mkdir test_data
 cp ~/Downloads/test_data-20250523T082527Z-1-001.zip test_data/
+cp ~/Downloads/ test_data/
+cp ~/Downloads/ test_data/
+cp ~/Downloads/ test_data/
 
 ## unzip
 
 cd checkpoints/ && unzip contact_graspnet_train_and_test-20250523T082241Z-1-001.zip
+unzip scene_2048_bs3_rad2_32-20250523T155812Z-1-001.zip
+unzip scene_test_2048_bs3_hor_sigma_001-20250523T155814Z-1-001.zip
+unzip scene_test_2048_bs3_hor_sigma_0025-20250523T155816Z-1-001.zip
+
 cd ../test_data/   && unzip test_data-20250523T082527Z-1-001.zip
 cd ..
 
