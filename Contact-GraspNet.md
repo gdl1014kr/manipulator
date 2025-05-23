@@ -91,3 +91,9 @@ python contact_graspnet/inference.py \
 
 
 
+
+
+python contact_graspnet/inference.py --np_path=test_data/*.npy \
+                                     --forward_passes=5 \
+                                     --z_range=[0.2,1.1]
+
