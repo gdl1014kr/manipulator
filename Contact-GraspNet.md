@@ -46,4 +46,8 @@ cp ~/Downloads/contact_graspnet_train_and_test-20250523T082241Z-1-001.zip checkp
 mkdir test_data
 cp ~/Downloads/test_data-20250523T082527Z-1-001.zip test_data/
 
+## unzip
+
+cd checkpoints/ && unzip contact_graspnet_train_and_test-20250523T082241Z-1-001.zip
+cd ../test_data/   && unzip test_data-20250523T082527Z-1-001.zip
 
