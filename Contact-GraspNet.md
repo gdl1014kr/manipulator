@@ -63,3 +63,12 @@ conda install -c conda-forge opencv
 conda install -c conda-forge trimesh
 conda install -c conda-forge scipy
 conda install -c conda-forge pyrender pyopengl trimesh pyglet
+pip install pyrender
+sudo apt-get update
+sudo apt-get install -y libvtk7-dev python3-vtk7
+conda install pyqt  
+pip install mayavi
+
+
+
+
