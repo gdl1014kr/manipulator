@@ -244,7 +244,7 @@ git clone https://github.com/ivalab/KGN.git $KGN_ROOT  # KGN 메인 코드 클�
 cd $KGN_ROOT
 2
 
-DCNv2 clone
+DCNv2 clone & install
 export DCNv2_ROOT=~/ros2_nanoowl_ws/src/DCNv2_latest
 git clone https://github.com/jinfagang/DCNv2_latest $DCNv2_ROOT
 cd $DCNv2_ROOT
@@ -257,6 +257,7 @@ export KGN_ROOT=~/ros2_nanoowl_ws/src/KGN
 git clone https://github.com/ivalab/KGN.git $KGN_ROOT 
 cd $KGN_ROOT
 pip install -r requirements.txt 
+
 
 
 2. Demo
