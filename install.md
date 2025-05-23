@@ -205,7 +205,7 @@ source ~/.bashrc
 
 
 
-## anaconda install(miniconda) - Jetson AGX Orin(JetPack 6.0, Ubuntu 22.04 aarch64)에서는 x86_64용 Anaconda 설치 스크립트 실행 시 illegal instruction 오류가 빈번히 발생하여
+## Miniconda install - Jetson AGX Orin(JetPack 6.0, Ubuntu 22.04 aarch64)에서는 x86_64용 Anaconda 설치 스크립트 실행 시 illegal instruction 오류가 빈번히 발생하여
 공식적으로는 경량화된 Miniconda 설치를 권장
 
 ### 설치 스크립트 다운로드
@@ -221,12 +221,12 @@ bash ~/Miniconda3-latest-Linux-aarch64.sh
 source ~/miniconda3/bin/activate
 conda init
 
-## Anaconda 환경 생성 및 관리
+## Miniconda 환경 생성 및 관리
 
 ### 새 환경 생성
 conda create -n kgn python=3.10
 
-###환경 활성화
+### 환경 활성화
 conda activate kgn
 
 ## torchaudio install(https://forums.developer.nvidia.com/t/pytorch-for-jetson/72048 해당 링크에서 torchviaudio download 선행)
