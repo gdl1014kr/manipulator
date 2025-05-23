@@ -253,17 +253,7 @@ pip install python-fcl
 python3 -m pip install --no-cache-dir ~/Downloads/torchaudio-2.3.0+952ea74-cp310-cp310-linux_aarch64.whl
 
 
-# KGN 설치 경로 지정
-export KGN_ROOT=~/workspace/KGN
-
-# KGN 저장소 클론
-git clone https://github.com/ivalab/KGN.git $KGN_ROOT  # KGN 메인 코드 클론:contentReference[oaicite:6]{index=6}
-
-# 작업 디렉터리로 이동
-cd $KGN_ROOT
-2
-
-DCNv2 clone & install
+## DCNv2 clone & install
 
 export DCNv2_ROOT=~/ros2_nanoowl_ws/src/DCNv2_latest
 git clone https://github.com/jinfagang/DCNv2_latest $DCNv2_ROOT
@@ -271,7 +261,7 @@ cd $DCNv2_ROOT
 python setup.py install --user
 
 
-KGN clone
+## KGN clone
 
 export KGN_ROOT=~/ros2_nanoowl_ws/src/KGN
 git clone https://github.com/ivalab/KGN.git $KGN_ROOT 
