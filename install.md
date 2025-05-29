@@ -93,16 +93,29 @@ python3 -m pip install --no-cache-dir \
   ~/Downloads/torchvision-0.18.0a0+6043bc2-cp310-cp310-linux_aarch64.whl
 
 
-## 2. torch2trt install
+## 2. tensorflow install
+sudo apt-get update
+sudo apt-get install \
+  libhdf5-serial-dev hdf5-tools libhdf5-dev \
+  zlib1g-dev zip libjpeg8-dev \
+  liblapack-dev libblas-dev gfortran
+sudo apt-get install python3-pip        # 필요 시
+python3 -m pip install --upgrade pip setuptools==65.5.0
+python3 -m pip install --extra-index-url \
+  https://developer.download.nvidia.com/compute/redist/jp/v60 \
+  tensorflow==2.16.1+nv24.07
+
+
+## 3. torch2trt install
 
 ### install the torch2trt Python library
 git clone https://github.com/NVIDIA-AI-IOT/torch2trt
 cd torch2trt
 python setup.py install --user
 
-## 3. Install NVIDIA TensorRT(jetpack sdk 설치할때 자동 설치=> 생략)
+## 4. Install NVIDIA TensorRT(jetpack sdk 설치할때 자동 설치=> 생략)
 
-## 4. Install the Transformers library
+## 5. Install the Transformers library
 
 python3 -m pip install transformers
 
