@@ -9,3 +9,6 @@ pip install -U -r requirements.txt
 mkdir -p assets/checkpoints/efficientvit_sam
 wget -O assets/checkpoints/efficientvit_sam/efficientvit_sam_xl0.pt \
   https://huggingface.co/mit-han-lab/efficientvit-sam/resolve/main/efficientvit_sam_xl0.pt
+
+sudo apt update
+sudo apt install nano -y
