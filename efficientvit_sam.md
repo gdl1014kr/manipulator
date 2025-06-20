@@ -46,3 +46,8 @@ wget -O assets/checkpoints/efficientvit_sam/efficientvit_sam_xl0.pt \
 
 sudo apt update
 sudo apt install nano -y
+
+
+## 모델 실행 및 사용
+cd applications/efficientvit_sam
+
