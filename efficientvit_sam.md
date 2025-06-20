@@ -1,5 +1,5 @@
 git clone https://github.com/mit-han-lab/efficientvit.git
-cd efficientvit
+cd efficientvit/applications/efficientvit_sam
            
 conda create -n efficientvit python=3.10 -y
 conda activate efficientvit
