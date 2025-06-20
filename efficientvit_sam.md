@@ -47,10 +47,6 @@ wget -O assets/checkpoints/efficientvit_sam/efficientvit_sam_xl0.pt \
 sudo apt update
 sudo apt install nano -y
 
-
-## 모델 실행 및 사용
-cd applications/efficientvit_sam
-
 ## ros2_nanoowl_ws/src/efficientvit/efficientvit/models/nn/norm.py를 아래와 같이 수정(triton 오류 방지)
 
 from typing import Optional
@@ -219,3 +215,6 @@ def set_norm_eps(model: nn.Module, eps: Optional[float] = None) -> None:
                 m.eps = eps
 
 ## ros2_nanoowl_ws/src/efficientvit/efficientvit/models/nn/__init__.py 에서 from.triton_rms_norm import *에 주석 표시(triton 오류 방지)
+
+## 모델 실행 및 사용
+
