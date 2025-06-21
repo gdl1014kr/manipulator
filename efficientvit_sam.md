@@ -226,9 +226,9 @@ mkdir -p assets/export_models/efficientvit_sam/tensorrt/
 mv ~/Downloads/l1_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 ### l1_decoder.onnx 이동
 mv ~/Downloads/l1_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
-### xl0_encoder.onnx 이동
+### XL0_encoder.onnx 이동
 mv ~/Downloads/xl0_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
-### xl0_decoder.onnx 이동
+### XL0_decoder.onnx 이동
 mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 
 ### ONNX 파일을 TensorRT로 변환(l1)
@@ -251,7 +251,7 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
     --fp16
 
-### ONNX 파일을 TensorRT로 변환(xl0)
+### ONNX 파일을 TensorRT로 변환(XL0)
 
 #### XL0 Encoder
 /usr/src/tensorrt/bin/trtexec \
