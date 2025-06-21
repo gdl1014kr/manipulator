@@ -230,3 +230,43 @@ mv ~/Downloads/l1_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_
 mv ~/Downloads/xl0_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 ### xl0_decoder.onnx 이동
 mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+
+### ONNX 파일을 TensorRT로 변환(l1)
+
+#### l1 Encoder
+/usr/src/tensorrt/bin/trtexec \
+    --onnx=assets/export_models/efficientvit_sam/onnx/l1_encoder.onnx \
+    --minShapes=input_image:1x3x512x512 \
+    --optShapes=input_image:1x3x512x512 \
+    --maxShapes=input_image:1x3x512x512 \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
+    --fp16
+
+#### l1 Decoder
+/usr/src/tensorrt/bin/trtexec \
+    --onnx=assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx \
+    --minShapes=point_coords:1x1x2,point_labels:1x1 \
+    --optShapes=point_coords:1x5x2,point_labels:1x5 \
+    --maxShapes=point_coords:1x10x2,point_labels:1x10 \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
+    --fp16
+
+### ONNX 파일을 TensorRT로 변환(xl0)
+
+#### XL0 Encoder
+/usr/src/tensorrt/bin/trtexec \
+    --onnx=assets/export_models/efficientvit_sam/onnx/xl0_encoder.onnx \
+    --minShapes=input_image:1x3x1024x1024 \
+    --optShapes=input_image:1x3x1024x1024 \
+    --maxShapes=input_image:1x3x1024x1024 \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_encoder.engine \
+    --fp16
+
+#### XL0 Decoder
+/usr/src/tensorrt/bin/trtexec \
+    --onnx=assets/export_models/efficientvit_sam/onnx/xl0_decoder.onnx \
+    --minShapes=point_coords:1x1x2,point_labels:1x1 \
+    --optShapes=point_coords:1x5x2,point_labels:1x5 \
+    --maxShapes=point_coords:1x10x2,point_labels:1x10 \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
+    --fp16
