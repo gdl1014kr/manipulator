@@ -283,13 +283,23 @@ ln -s /usr/lib/python3.10/dist-packages/tensorrt $(python -c 'import site; print
 ls -l $(python -c 'import site; print(site.getsitepackages()[0])') | grep tensorrt
 
 
-### L1 모델 (512x512) TensorRT 추론 실행
+### L1 모델 (512x512) TensorRT 추론 실행(point)
 python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --model efficientvit-sam-l1 \
     --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
     --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
-    --img_path test_image.png \
+    --img_path example.png \
     --mode point
+
+### L1 모델 (512x512) TensorRT 추론 실행(boxes)
+python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
+    --model efficientvit-sam-l1 \
+    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
+    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
+    --img_path example.png \
+    --mode boxes \
+    --boxes "[[200, 150, 450, 400]]"
+
 
 
 ### XL0 모델 (1024x1024) TensorRT 추론 실행
@@ -297,5 +307,6 @@ python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --model efficientvit-sam-xl0 \
     --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder.engine \
     --decoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
-    --img_path test_image.png \
+    --img_path example.png \
     --mode point
+
