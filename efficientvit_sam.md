@@ -271,6 +271,17 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
     --fp16
 
+### Tensorrt python package를 conda 환경으로 연결(Symbolic link)
+
+#### tensorrt package 실제 위치 확인
+ls -ld /usr/lib/python3.10/dist-packages/tensorrt
+
+#### 가상 환경에 Symbolic link 생성
+ln -s /usr/lib/python3.10/dist-packages/tensorrt $(python -c 'import site; print(site.getsitepackages()[0])')/tensorrt
+
+#### link 생성 확인
+ls -l $(python -c 'import site; print(site.getsitepackages()[0])') | grep tensorrt
+
 
 ### L1 모델 (512x512) TensorRT 추론 실행
 python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
