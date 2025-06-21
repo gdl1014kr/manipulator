@@ -270,3 +270,21 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --maxShapes=point_coords:1x10x2,point_labels:1x10 \
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
     --fp16
+
+
+### L1 모델 (512x512) TensorRT 추론 실행
+python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
+    --model efficientvit-sam-l1 \
+    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
+    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
+    --img_path test_image.png \
+    --mode point
+
+
+### XL0 모델 (1024x1024) TensorRT 추론 실행
+python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
+    --model efficientvit-sam-xl0 \
+    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder.engine \
+    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
+    --img_path test_image.png \
+    --mode point
