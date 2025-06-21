@@ -216,5 +216,17 @@ def set_norm_eps(model: nn.Module, eps: Optional[float] = None) -> None:
 
 ## ros2_nanoowl_ws/src/efficientvit/efficientvit/models/nn/__init__.py 에서 from.triton_rms_norm import *에 주석 표시(triton 오류 방지)
 
-## 모델 실행 및 사용
+## TensorRT
+cd ~/ros2_nanoowl_ws/src/efficientvit/
 
+mkdir -p assets/export_models/efficientvit_sam/onnx/
+mkdir -p assets/export_models/efficientvit_sam/tensorrt/
+
+###  l1_encoder.onnx 이동
+mv ~/Downloads/l1_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+### l1_decoder.onnx 이동
+mv ~/Downloads/l1_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+### xl0_encoder.onnx 이동
+mv ~/Downloads/xl0_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+### xl0_decoder.onnx 이동
+mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
