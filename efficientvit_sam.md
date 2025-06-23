@@ -327,16 +327,16 @@ ls -l $(python -c 'import site; print(site.getsitepackages()[0])') | grep tensor
 ### L1 모델 (512x512) TensorRT 추론 실행(point)
 python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --model efficientvit-sam-l1 \
-    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
-    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
+    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine \
+    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine \
     --img_path example.png \
     --mode point
 
 ### L1 모델 (512x512) TensorRT 추론 실행(boxes)
 python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --model efficientvit-sam-l1 \
-    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
-    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
+    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine \
+    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine \
     --img_path example.png \
     --mode boxes \
     --boxes "[[200, 150, 450, 400]]"
@@ -346,8 +346,8 @@ python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
 ### XL0 모델 (1024x1024) TensorRT 추론 실행(point)
 python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --model efficientvit-sam-xl0 \
-    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder.engine \
-    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
+    --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder_fp16.engine \
+    --decoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_decoder_fp16.engine \
     --img_path example.png \
     --mode point
 
