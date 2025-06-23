@@ -302,7 +302,7 @@ python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
 
 
 
-### XL0 모델 (1024x1024) TensorRT 추론 실행
+### XL0 모델 (1024x1024) TensorRT 추론 실행(point)
 python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --model efficientvit-sam-xl0 \
     --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder.engine \
