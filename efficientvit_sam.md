@@ -231,7 +231,7 @@ mv ~/Downloads/xl0_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
 ### XL0_decoder.onnx 이동
 mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 
-### ONNX 파일을 TensorRT로 변환(l1)
+### ONNX 파일을 TensorRT로 변환(l1, fp16)
 
 #### l1 Encoder
 /usr/src/tensorrt/bin/trtexec \
@@ -239,7 +239,7 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --minShapes=input_image:1x3x512x512 \
     --optShapes=input_image:1x3x512x512 \
     --maxShapes=input_image:1x3x512x512 \
-    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder.engine \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine \
     --fp16
 
 #### l1 Decoder
@@ -248,10 +248,10 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --minShapes=point_coords:1x1x2,point_labels:1x1 \
     --optShapes=point_coords:1x5x2,point_labels:1x5 \
     --maxShapes=point_coords:1x10x2,point_labels:1x10 \
-    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder.engine \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine \
     --fp16
 
-### ONNX 파일을 TensorRT로 변환(XL0)
+### ONNX 파일을 TensorRT로 변환(XL0, fp16)
 
 #### XL0 Encoder
 /usr/src/tensorrt/bin/trtexec \
@@ -259,7 +259,7 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --minShapes=input_image:1x3x1024x1024 \
     --optShapes=input_image:1x3x1024x1024 \
     --maxShapes=input_image:1x3x1024x1024 \
-    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_encoder.engine \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_encoder_fp16.engine \
     --fp16
 
 #### XL0 Decoder
@@ -268,7 +268,7 @@ mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export
     --minShapes=point_coords:1x1x2,point_labels:1x1 \
     --optShapes=point_coords:1x5x2,point_labels:1x5 \
     --maxShapes=point_coords:1x10x2,point_labels:1x10 \
-    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_decoder.engine \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_decoder_fp16.engine \
     --fp16
 
 ### Tensorrt python package를 conda 환경으로 연결(Symbolic link)
