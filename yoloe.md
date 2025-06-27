@@ -4,7 +4,7 @@ yolo export model=yoloe-11l-seg.pt format=onnx
 yolo export model=yoloe-11m-seg.pt format=onnx 
 yolo export model=yoloe-11s-seg.pt format=onnx 
 
-## onnx -> tensorrt(engine) : fp16
+## onnx -> tensorrt(engine) : fp16 (input 크기 1x3x640x640 고정인 static model 이므로 min/opt/max shape 명시 x)
 
 sudo nvpmodel -m 0
 sudo jetson_clocks
