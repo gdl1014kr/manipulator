@@ -47,7 +47,7 @@ wget -O assets/checkpoints/efficientvit_sam/efficientvit_sam_xl0.pt \
 sudo apt update
 sudo apt install nano -y
 
-## ros2_nanoowl_ws/src/efficientvit/efficientvit/models/nn/norm.py를 아래와 같이 수정(triton 오류 방지)
+## vlm/src/efficientvit/efficientvit/models/nn/norm.py를 아래와 같이 수정(triton 오류 방지)
 
 from typing import Optional
 
@@ -214,22 +214,22 @@ def set_norm_eps(model: nn.Module, eps: Optional[float] = None) -> None:
             if eps is not None:
                 m.eps = eps
 
-## ros2_nanoowl_ws/src/efficientvit/efficientvit/models/nn/__init__.py 에서 from.triton_rms_norm import *에 주석 표시(triton 오류 방지)
+## vlm/src/efficientvit/efficientvit/models/nn/__init__.py 에서 from.triton_rms_norm import *에 주석 표시(triton 오류 방지)
 
 ## TensorRT
-cd ~/ros2_nanoowl_ws/src/efficientvit/
+cd ~/vlm/src/efficientvit/
 
 mkdir -p assets/export_models/efficientvit_sam/onnx/
 mkdir -p assets/export_models/efficientvit_sam/tensorrt/
 
 ###  l1_encoder.onnx 이동
-mv ~/Downloads/l1_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+mv ~/Downloads/l1_encoder.onnx ~/vlm/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 ### l1_decoder.onnx 이동
-mv ~/Downloads/l1_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+mv ~/Downloads/l1_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 ### XL0_encoder.onnx 이동
-mv ~/Downloads/xl0_encoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+mv ~/Downloads/xl0_encoder.onnx ~/vlm/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 ### XL0_decoder.onnx 이동
-mv ~/Downloads/xl0_decoder.onnx ~/ros2_nanoowl_ws/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
+mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/efficientvit_sam/onnx/
 
 ### ONNX 파일을 TensorRT로 변환(l1, fp16)
 
