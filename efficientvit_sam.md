@@ -1,4 +1,4 @@
-cd ros2_nanoowl_ws/src
+cd vlm/src
 git clone https://github.com/mit-han-lab/efficientvit.git
 cd efficientvit
            
