@@ -351,6 +351,8 @@ python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
     --img_path example.png \
     --mode point
 
+
+efficientvit_trt_experiment.py
 -----------------------------------------------------------------------------------------
 ## intel RealSense Camera SDK 설치
 pip install pyrealsense2
