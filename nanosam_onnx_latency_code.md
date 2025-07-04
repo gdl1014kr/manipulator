@@ -1,5 +1,7 @@
 ## https://www.elinux.org/Jetson_Zoo#ONNX_Runtime 해당 링크에서 onnxruntime_gpu-1.18.0-cp310-cp310-linux_aarch64.whl 설치 
-## onnx runtime(gpt) 설치: Downloads 폴더에서 pip3 install onnxruntime_gpu-1.18.0-cp310-cp310-linux_aarch64.whl 입력하여 gpu 버전의 onnx runtime 설치. 
+=> jetson은 GPU 기반이기 때문에 onnxruntime을 GPU용으로 설치해야함.
+
+## onnx runtime(gpu) 설치: Downloads 폴더에서 pip3 install onnxruntime_gpu-1.18.0-cp310-cp310-linux_aarch64.whl 입력하여 gpu 버전의 onnx runtime 설치. 
 
 ## 설치한 onnxruntime 버전에 맞게 numpy 다운그레이드
 pip install "numpy<2"
