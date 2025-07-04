@@ -175,6 +175,6 @@ if __name__ == "__main__":
     )
     plt.text(20, 60, perf_text, color='white', fontsize=10, bbox=dict(facecolor='black', alpha=0.7))
     
-    output_filename = "data/nanosam_onnx_perf_test_out.jpg"
+    output_filename = "data/nanosam_onnx_latency.jpg"
     plt.savefig(output_filename, bbox_inches="tight", pad_inches=0.0)
     print(f"\nDone. Result saved to {output_filename}")
