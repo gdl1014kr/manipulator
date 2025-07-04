@@ -149,14 +149,15 @@ if __name__ == "__main__":
     parser.add_argument("--mode", type=str, default="point", choices=["point", "boxes"])
     parser.add_argument("--point", type=str, default=None)
     parser.add_argument("--boxes", type=str, default=None)
+    # <<< 수정된 부분: 워밍업 및 반복 횟수 인자 추가 >>>
+    parser.add_argument("--warmup", type=int, default=10, help="Number of warmup iterations.")
+    parser.add_argument("--iters", type=int, default=100, help="Number of measurement iterations.")
     args = parser.parse_args()
 
     os.makedirs(os.path.dirname(args.out_path), exist_ok=True)
-
-    # 전체 파이프라인 시간 측정 시작
-    total_start_time = time.time()
-
-    # 모델 로딩
+    
+    # 1. 모델 로딩 (측정에서 제외되는 일회성 작업)
+    print("Loading TensorRT engines...")
     with trt.Logger() as logger, trt.Runtime(logger) as runtime:
         with open(args.encoder_engine, "rb") as f:
             engine_bytes = f.read()
@@ -172,8 +173,9 @@ if __name__ == "__main__":
         input_names=["image_embeddings", "point_coords", "point_labels"],
         output_names=["masks", "iou_predictions"],
     )
+    print("Engines loaded.")
 
-    # 이미지 로딩 및 전처리
+    # 2. 이미지 로딩 및 전처리 (파이프라인의 일부)
     raw_img = cv2.cvtColor(cv2.imread(args.img_path), cv2.COLOR_BGR2RGB)
     origin_image_size = raw_img.shape[:2]
 
@@ -184,51 +186,71 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError
 
-    # 순수 AI 추론 시간 측정 시작
-    inference_start_time = time.time()
-    
-    # 인코더 추론
-    image_embedding = trt_encoder(img)
-    image_embedding = image_embedding[0].reshape(1, 256, 64, 64)
-
+    # 3. 워밍업 (정확한 측정을 위해 GPU 예열)
+    print(f"Warming up the model with {args.warmup} iterations...")
+    # 워밍업을 위한 더미 입력 생성
+    image_embedding_warmup = trt_encoder(img)
+    image_embedding_warmup = image_embedding_warmup[0].reshape(1, 256, 64, 64)
     input_size = get_preprocess_shape(*origin_image_size, long_side_length=1024)
-
-    # 디코더 추론 (포인트 또는 박스 모드)
     if args.mode == "point":
         H, W, _ = raw_img.shape
-        point = np.array(
-            yaml.safe_load(f"[[[{W // 2}, {H // 2}, {1}]]]" if args.point is None else args.point), dtype=np.float32
-        )
+        point = np.array(yaml.safe_load(f"[[[{W // 2}, {H // 2}, {1}]]]" if args.point is None else args.point), dtype=np.float32)
+        point_coords_warmup = apply_coords(point[..., :2], origin_image_size, input_size).astype(np.float32)
+        point_labels_warmup = point[..., 2]
+        inputs_warmup = (image_embedding_warmup, torch.from_numpy(point_coords_warmup).to("cuda"), torch.from_numpy(point_labels_warmup).to("cuda"))
+    elif args.mode == "boxes":
+        boxes_warmup = np.array(yaml.safe_load(args.boxes), dtype=np.float32)
+        boxes_warmup = apply_boxes(boxes_warmup, origin_image_size, input_size).astype(np.float32)
+        box_label_warmup = np.array([[2, 3] for _ in range(boxes_warmup.shape[0])], dtype=np.float32).reshape((-1, 2))
+        inputs_warmup = (image_embedding_warmup, torch.from_numpy(boxes_warmup).to("cuda"), torch.from_numpy(box_label_warmup).to("cuda"))
+    
+    for _ in range(args.warmup):
+        _ = trt_decoder(*inputs_warmup)
+    
+    torch.cuda.synchronize() # 워밍업 연산 완료 대기
+    print("Warmup finished.")
+
+    # 4. 순수 추론 성능 측정 (반복 및 평균)
+    print(f"Running inference measurement for {args.iters} iterations...")
+    inference_latencies = []
+    
+    # 추론에 사용할 입력값 미리 준비
+    image_embedding = trt_encoder(img)
+    image_embedding = image_embedding[0].reshape(1, 256, 64, 64)
+    if args.mode == "point":
+        H, W, _ = raw_img.shape
+        point = np.array(yaml.safe_load(f"[[[{W // 2}, {H // 2}, {1}]]]" if args.point is None else args.point), dtype=np.float32)
         point_coords = point[..., :2]
         point_labels = point[..., 2]
         orig_point_coords = deepcopy(point_coords)
         orig_point_labels = deepcopy(point_labels)
-        point_coords = apply_coords(point_coords, origin_image_size, input_size).astype(np.float32)
-        inputs = (image_embedding, torch.from_numpy(point_coords).to("cuda"), torch.from_numpy(point_labels).to("cuda"))
-        low_res_masks, _ = trt_decoder(*inputs)
-
+        point_coords_tensor = torch.from_numpy(apply_coords(point_coords, origin_image_size, input_size).astype(np.float32)).to("cuda")
+        point_labels_tensor = torch.from_numpy(point_labels).to("cuda")
+        inputs = (image_embedding, point_coords_tensor, point_labels_tensor)
     elif args.mode == "boxes":
         boxes = np.array(yaml.safe_load(args.boxes), dtype=np.float32)
         orig_boxes = deepcopy(boxes)
-        boxes = apply_boxes(boxes, origin_image_size, input_size).astype(np.float32)
-        box_label = np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))
-        point_coords = boxes
-        point_labels = box_label
-        inputs = (image_embedding, torch.from_numpy(point_coords).to("cuda"), torch.from_numpy(point_labels).to("cuda"))
+        boxes_tensor = torch.from_numpy(apply_boxes(boxes, origin_image_size, input_size).astype(np.float32)).to("cuda")
+        box_label_tensor = torch.from_numpy(np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))).to("cuda")
+        inputs = (image_embedding, boxes_tensor, box_label_tensor)
+
+    for i in range(args.iters):
+        torch.cuda.synchronize()
+        start_time = time.time()
+
         low_res_masks, _ = trt_decoder(*inputs)
-    else:
-        raise NotImplementedError
 
-    # 순수 AI 추론 시간 측정 종료
-    inference_end_time = time.time()
+        torch.cuda.synchronize()
+        end_time = time.time()
+        inference_latencies.append((end_time - start_time) * 1000) # ms로 저장
 
-    # 후처리
+    # 5. 후처리 및 시각화 (일회성 작업)
+    # 마지막 반복의 결과를 사용
     low_res_masks = low_res_masks.reshape(1, -1, 256, 256)
     masks = mask_postprocessing(low_res_masks, origin_image_size)[0]
     masks = masks > 0.0
     masks = masks.cpu().numpy()
-    
-    # 시각화 준비
+
     plt.figure(figsize=(10, 10))
     plt.imshow(raw_img)
     for mask in masks:
@@ -242,31 +264,22 @@ if __name__ == "__main__":
             
     plt.axis("off")
 
-    # 전체 파이프라인 시간 측정 종료 및 결과 계산/출력/저장
-    total_end_time = time.time()
+    # 6. 결과 계산 및 출력
+    avg_inference_latency_ms = np.mean(inference_latencies)
+    std_inference_latency_ms = np.std(inference_latencies)
+    inference_fps = 1000.0 / avg_inference_latency_ms if avg_inference_latency_ms > 0 else 0
 
-    # Latency 및 FPS 계산
-    total_latency_ms = (total_end_time - total_start_time) * 1000
-    inference_latency_ms = (inference_end_time - inference_start_time) * 1000
-    total_fps = 1.0 / (total_latency_ms / 1000) if total_latency_ms > 0 else 0
-    inference_fps = 1.0 / (inference_latency_ms / 1000) if inference_latency_ms > 0 else 0
-    
     print("\n--- Performance Metrics ---")
-    print(f"Total Pipeline Latency: {total_latency_ms:.2f} ms")
-    print(f"Total Theoretical FPS: {total_fps:.2f}")
-    print(f"Inference-Only Latency: {inference_latency_ms:.2f} ms")
+    print(f"Number of Iterations: {args.iters}")
+    print(f"Average Inference-Only Latency: {avg_inference_latency_ms:.2f} ms (+/- {std_inference_latency_ms:.2f} ms)")
     print(f"Inference-Only Theoretical FPS: {inference_fps:.2f}")
-    
-    # <<< 수정된 부분 시작 >>>
-    # 이미지에 성능 텍스트 추가 (4가지 지표 모두 포함)
+
+    # 이미지에 성능 텍스트 추가
     perf_text = (
-        f"Total Pipeline Latency: {total_latency_ms:.2f} ms\n"
-        f"Total Theoretical FPS: {total_fps:.2f}\n"
-        f"Inference-Only Latency: {inference_latency_ms:.2f} ms\n"
-        f"Inference-Only Theoretical FPS: {inference_fps:.2f}"
+        f"Avg Inference Latency: {avg_inference_latency_ms:.2f} ms\n"
+        f"Inference FPS: {inference_fps:.2f}"
     )
-    plt.text(20, 60, perf_text, color='white', fontsize=10, bbox=dict(facecolor='black', alpha=0.7))
-    # <<< 수정된 부분 끝 >>>
+    plt.text(20, 40, perf_text, color='white', fontsize=12, bbox=dict(facecolor='black', alpha=0.7))
 
     plt.savefig(args.out_path, bbox_inches="tight", dpi=300, pad_inches=0.0)
     print(f"\nResult saved in {args.out_path}")
