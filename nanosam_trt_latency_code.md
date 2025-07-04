@@ -87,6 +87,6 @@ if __name__ == "__main__":
     
     plt.axis('off')
     
-    output_filename = "data/trt_perf_test_out.jpg"
+    output_filename = "data/nanosam_trt_latency.jpg"
     plt.savefig(output_filename)
     print(f"\nDone. Result saved to {output_filename}")
