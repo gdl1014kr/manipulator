@@ -100,7 +100,7 @@ def resize_longest_image_size(input_image_size: torch.Tensor, longest_side: int)
 def mask_postprocessing(masks: torch.Tensor, orig_im_size: torch.Tensor) -> torch.Tensor:
     img_size = 1024
     masks = masks.clone().detach()
-    orig_im_size = torch.tensor(orig_im_size)
+    orig_im_size = torch.tensor(orig_im_size, device='cuda')
 
     masks = F.interpolate(
         masks,
@@ -111,9 +111,9 @@ def mask_postprocessing(masks: torch.Tensor, orig_im_size: torch.Tensor) -> torc
 
     prepadded_size = resize_longest_image_size(orig_im_size, img_size)
     masks = masks[..., : int(prepadded_size[0]), : int(prepadded_size[1])]
-    orig_im_size = orig_im_size.to(torch.int64)
+    
     h, w = orig_im_size[0], orig_im_size[1]
-    masks = F.interpolate(masks, size=(h, w), mode="bilinear", align_corners=False)
+    masks = F.interpolate(masks, size=(h.item(), w.item()), mode="bilinear", align_corners=False)
     return masks
 
 
@@ -144,12 +144,11 @@ if __name__ == "__main__":
     parser.add_argument("--model", type=str, required=True, help="model type.")
     parser.add_argument("--encoder_engine", type=str, required=True, help="TRT engine.")
     parser.add_argument("--decoder_engine", type=str, required=True, help="TRT engine.")
-    parser.add_argument("--img_path", type=str, default="assets/fig/cat.jpg")
+    parser.add_argument("--img_path", type=str, default="assets/example.png")
     parser.add_argument("--out_path", type=str, default=".demo/efficientvit_sam_demo_tensorrt.png")
     parser.add_argument("--mode", type=str, default="point", choices=["point", "boxes"])
     parser.add_argument("--point", type=str, default=None)
     parser.add_argument("--boxes", type=str, default=None)
-    # <<< 수정된 부분: 워밍업 및 반복 횟수 인자 추가 >>>
     parser.add_argument("--warmup", type=int, default=10, help="Number of warmup iterations.")
     parser.add_argument("--iters", type=int, default=100, help="Number of measurement iterations.")
     args = parser.parse_args()
@@ -175,7 +174,7 @@ if __name__ == "__main__":
     )
     print("Engines loaded.")
 
-    # 2. 이미지 로딩 및 전처리 (파이프라인의 일부)
+    # 2. 이미지 로딩 및 전처리
     raw_img = cv2.cvtColor(cv2.imread(args.img_path), cv2.COLOR_BGR2RGB)
     origin_image_size = raw_img.shape[:2]
 
@@ -186,37 +185,8 @@ if __name__ == "__main__":
     else:
         raise NotImplementedError
 
-    # 3. 워밍업 (정확한 측정을 위해 GPU 예열)
-    print(f"Warming up the model with {args.warmup} iterations...")
-    # 워밍업을 위한 더미 입력 생성
-    image_embedding_warmup = trt_encoder(img)
-    image_embedding_warmup = image_embedding_warmup[0].reshape(1, 256, 64, 64)
+    # 3. 추론에 사용할 프롬프트 준비
     input_size = get_preprocess_shape(*origin_image_size, long_side_length=1024)
-    if args.mode == "point":
-        H, W, _ = raw_img.shape
-        point = np.array(yaml.safe_load(f"[[[{W // 2}, {H // 2}, {1}]]]" if args.point is None else args.point), dtype=np.float32)
-        point_coords_warmup = apply_coords(point[..., :2], origin_image_size, input_size).astype(np.float32)
-        point_labels_warmup = point[..., 2]
-        inputs_warmup = (image_embedding_warmup, torch.from_numpy(point_coords_warmup).to("cuda"), torch.from_numpy(point_labels_warmup).to("cuda"))
-    elif args.mode == "boxes":
-        boxes_warmup = np.array(yaml.safe_load(args.boxes), dtype=np.float32)
-        boxes_warmup = apply_boxes(boxes_warmup, origin_image_size, input_size).astype(np.float32)
-        box_label_warmup = np.array([[2, 3] for _ in range(boxes_warmup.shape[0])], dtype=np.float32).reshape((-1, 2))
-        inputs_warmup = (image_embedding_warmup, torch.from_numpy(boxes_warmup).to("cuda"), torch.from_numpy(box_label_warmup).to("cuda"))
-    
-    for _ in range(args.warmup):
-        _ = trt_decoder(*inputs_warmup)
-    
-    torch.cuda.synchronize() # 워밍업 연산 완료 대기
-    print("Warmup finished.")
-
-    # 4. 순수 추론 성능 측정 (반복 및 평균)
-    print(f"Running inference measurement for {args.iters} iterations...")
-    inference_latencies = []
-    
-    # 추론에 사용할 입력값 미리 준비
-    image_embedding = trt_encoder(img)
-    image_embedding = image_embedding[0].reshape(1, 256, 64, 64)
     if args.mode == "point":
         H, W, _ = raw_img.shape
         point = np.array(yaml.safe_load(f"[[[{W // 2}, {H // 2}, {1}]]]" if args.point is None else args.point), dtype=np.float32)
@@ -226,26 +196,45 @@ if __name__ == "__main__":
         orig_point_labels = deepcopy(point_labels)
         point_coords_tensor = torch.from_numpy(apply_coords(point_coords, origin_image_size, input_size).astype(np.float32)).to("cuda")
         point_labels_tensor = torch.from_numpy(point_labels).to("cuda")
-        inputs = (image_embedding, point_coords_tensor, point_labels_tensor)
+
     elif args.mode == "boxes":
         boxes = np.array(yaml.safe_load(args.boxes), dtype=np.float32)
         orig_boxes = deepcopy(boxes)
-        boxes_tensor = torch.from_numpy(apply_boxes(boxes, origin_image_size, input_size).astype(np.float32)).to("cuda")
-        box_label_tensor = torch.from_numpy(np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))).to("cuda")
-        inputs = (image_embedding, boxes_tensor, box_label_tensor)
+        point_coords_tensor = torch.from_numpy(apply_boxes(boxes, origin_image_size, input_size).astype(np.float32)).to("cuda")
+        point_labels_tensor = torch.from_numpy(np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))).to("cuda")
+    else:
+        raise NotImplementedError
+        
+    # 4. 워밍업 (정확한 측정을 위해 GPU 예열)
+    print(f"Warming up the model with {args.warmup} iterations...")
+    for _ in range(args.warmup):
+        image_embedding = trt_encoder(img)
+        image_embedding = image_embedding[0].reshape(1, 256, 64, 64)
+        inputs = (image_embedding, point_coords_tensor, point_labels_tensor)
+        _ = trt_decoder(*inputs)
+    
+    torch.cuda.synchronize() # 워밍업 연산 완료 대기
+    print("Warmup finished.")
 
+    # 5. 순수 추론 성능 측정 (반복 및 평균)
+    print(f"Running full inference measurement for {args.iters} iterations...")
+    inference_latencies = []
+    
     for i in range(args.iters):
         torch.cuda.synchronize()
         start_time = time.time()
 
+        # <<< 수정된 부분: 인코더와 디코더 모두 반복문 안에서 측정 >>>
+        image_embedding = trt_encoder(img)
+        image_embedding = image_embedding[0].reshape(1, 256, 64, 64)
+        inputs = (image_embedding, point_coords_tensor, point_labels_tensor)
         low_res_masks, _ = trt_decoder(*inputs)
 
         torch.cuda.synchronize()
         end_time = time.time()
         inference_latencies.append((end_time - start_time) * 1000) # ms로 저장
 
-    # 5. 후처리 및 시각화 (일회성 작업)
-    # 마지막 반복의 결과를 사용
+    # 6. 후처리 및 시각화 (일회성 작업)
     low_res_masks = low_res_masks.reshape(1, -1, 256, 256)
     masks = mask_postprocessing(low_res_masks, origin_image_size)[0]
     masks = masks > 0.0
@@ -264,20 +253,21 @@ if __name__ == "__main__":
             
     plt.axis("off")
 
-    # 6. 결과 계산 및 출력
+    # 7. 결과 계산 및 출력
     avg_inference_latency_ms = np.mean(inference_latencies)
     std_inference_latency_ms = np.std(inference_latencies)
     inference_fps = 1000.0 / avg_inference_latency_ms if avg_inference_latency_ms > 0 else 0
 
-    print("\n--- Performance Metrics ---")
+    # <<< 수정된 부분: 출력 메시지를 'Full Inference'로 명확화 >>>
+    print("\n--- Performance Metrics (EfficientViT - TensorRT) ---")
     print(f"Number of Iterations: {args.iters}")
-    print(f"Average Inference-Only Latency: {avg_inference_latency_ms:.2f} ms (+/- {std_inference_latency_ms:.2f} ms)")
-    print(f"Inference-Only Theoretical FPS: {inference_fps:.2f}")
+    print(f"Average Full Inference Latency: {avg_inference_latency_ms:.2f} ms (+/- {std_inference_latency_ms:.2f} ms)")
+    print(f"Full Inference Theoretical FPS: {inference_fps:.2f}")
 
     # 이미지에 성능 텍스트 추가
     perf_text = (
-        f"Avg Inference Latency: {avg_inference_latency_ms:.2f} ms\n"
-        f"Inference FPS: {inference_fps:.2f}"
+        f"Avg Full Inference Latency (TRT): {avg_inference_latency_ms:.2f} ms\n"
+        f"Full Inference FPS (TRT): {inference_fps:.2f}"
     )
     plt.text(20, 40, perf_text, color='white', fontsize=12, bbox=dict(facecolor='black', alpha=0.7))
 
