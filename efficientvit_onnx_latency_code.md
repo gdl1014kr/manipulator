@@ -16,7 +16,7 @@ import torchvision.transforms as transforms
 import yaml
 from applications.efficientvit_sam.deployment.onnx.export_encoder import SamResize
 
-
+# <<< 수정된 부분: 누락되었던 시각화 함수들 추가 시작 >>>
 def show_mask(mask, ax, random_color=False):
     if random_color:
         color = np.concatenate([np.random.random(3), np.array([0.6])], axis=0)
@@ -42,6 +42,7 @@ def show_box(box, ax):
     x0, y0 = box[0], box[1]
     w, h = box[2] - box[0], box[3] - box[1]
     ax.add_patch(plt.Rectangle((x0, y0), w, h, edgecolor="green", facecolor=(0, 0, 0, 0), lw=2))
+# <<< 수정된 부분: 누락되었던 시각화 함수들 추가 끝 >>>
 
 
 class SamEncoder:
@@ -114,23 +115,15 @@ def resize_longest_image_size(input_image_size: torch.Tensor, longest_side: int)
 
 def mask_postprocessing(masks: np.ndarray, orig_im_size: tuple[int, int]) -> np.ndarray:
     img_size = 1024
-    # ONNX 결과가 numpy이므로 torch 텐서로 변환하여 GPU에서 후처리
     masks = torch.from_numpy(masks).cuda() 
     orig_im_size_tensor = torch.tensor(orig_im_size, device='cuda')
     
-    masks = F.interpolate(
-        masks,
-        size=(img_size, img_size),
-        mode="bilinear",
-        align_corners=False,
-    )
-    
+    masks = F.interpolate(masks, size=(img_size, img_size), mode="bilinear", align_corners=False)
     prepadded_size = resize_longest_image_size(orig_im_size_tensor, img_size)
     masks = masks[..., : int(prepadded_size[0]), : int(prepadded_size[1])]
     
     h, w = orig_im_size_tensor[0], orig_im_size_tensor[1]
     masks = F.interpolate(masks, size=(h.item(), w.item()), mode="bilinear", align_corners=False)
-    # 최종 결과를 CPU로 다시 가져와 numpy로 변환
     return masks.cpu().numpy()
 
 
@@ -166,8 +159,6 @@ if __name__ == "__main__":
         raise NotImplementedError
 
     # 3. 추론 입력값 준비
-    img_embeddings = encoder(img) # 인코더는 한 번만 실행
-    
     if args.mode == "point":
         H, W, _ = raw_img.shape
         point = np.array(yaml.safe_load(f"[[[{W // 2}, {H // 2}, {1}]]]" if args.point is None else args.point), dtype=np.float32)
@@ -176,47 +167,43 @@ if __name__ == "__main__":
         orig_prompts = deepcopy(point_coords)
         orig_labels = deepcopy(point_labels)
         
-        # 좌표 변환
         input_size = get_preprocess_shape(*origin_image_size, long_side_length=1024)
         point_coords = apply_coords(point_coords, origin_image_size, input_size).astype(np.float32)
 
     elif args.mode == "boxes":
         boxes = np.array(yaml.safe_load(args.boxes), dtype=np.float32)
         orig_boxes = deepcopy(boxes)
-        # 박스 좌표를 포인트와 레이블 형식으로 변환
         input_size = get_preprocess_shape(*origin_image_size, long_side_length=1024)
         point_coords = apply_boxes(boxes, origin_image_size, input_size).astype(np.float32)
         point_labels = np.array([[2, 3] for _ in range(boxes.shape[0])], dtype=np.float32).reshape((-1, 2))
     else:
         raise NotImplementedError
 
-    # 4. 워밍업 (정확한 측정을 위해 GPU 예열)
+    # 4. 워밍업
     print(f"Warming up the ONNX model with {args.warmup} iterations...")
     for _ in range(args.warmup):
+        img_embeddings = encoder(img)
         _ = decoder(img_embeddings, point_coords, point_labels)
-    torch.cuda.synchronize() # 워밍업 연산 완료 대기
+    torch.cuda.synchronize() 
     print("Warmup finished.")
 
     # 5. 순수 추론 성능 측정 (반복 및 평균)
-    print(f"Running ONNX inference measurement for {args.iters} iterations...")
+    print(f"Running full ONNX inference measurement for {args.iters} iterations...")
     inference_latencies = []
     for _ in range(args.iters):
         torch.cuda.synchronize()
         start_time = time.time()
 
-        # <<< 측정 대상: 디코더 추론 >>>
-        # 인코더는 이미 실행했으므로 여기서는 디코더만 측정
+        img_embeddings = encoder(img)
         low_res_masks, _ = decoder(img_embeddings, point_coords, point_labels)
         
         torch.cuda.synchronize()
         end_time = time.time()
         inference_latencies.append((end_time - start_time) * 1000)
 
-    # 6. 후처리 및 시각화 (일회성 작업)
-    # 마지막 반복의 결과를 사용하여 후처리 진행
+    # 6. 후처리 및 시각화
     final_masks = mask_postprocessing(low_res_masks, origin_image_size)
 
-    # 시각화
     plt.figure(figsize=(10, 10))
     plt.imshow(raw_img)
     for mask in final_masks:
@@ -234,15 +221,14 @@ if __name__ == "__main__":
     std_inference_latency_ms = np.std(inference_latencies)
     inference_fps = 1000.0 / avg_inference_latency_ms if avg_inference_latency_ms > 0 else 0
 
-    print("\n--- Performance Metrics (ONNX Runtime) ---")
+    print("\n--- Performance Metrics (EfficientViT - ONNX Runtime) ---")
     print(f"Number of Iterations: {args.iters}")
-    print(f"Average Decoder-Only Latency: {avg_inference_latency_ms:.2f} ms (+/- {std_inference_latency_ms:.2f} ms)")
-    print(f"Decoder-Only Theoretical FPS: {inference_fps:.2f}")
+    print(f"Average Full Inference Latency: {avg_inference_latency_ms:.2f} ms (+/- {std_inference_latency_ms:.2f} ms)")
+    print(f"Full Inference Theoretical FPS: {inference_fps:.2f}")
 
-    # 이미지에 성능 텍스트 추가
     perf_text = (
-        f"Avg Decoder Latency (ONNX): {avg_inference_latency_ms:.2f} ms\n"
-        f"Decoder FPS (ONNX): {inference_fps:.2f}"
+        f"Avg Full Inference Latency (ONNX): {avg_inference_latency_ms:.2f} ms\n"
+        f"Full Inference FPS (ONNX): {inference_fps:.2f}"
     )
     plt.text(20, 40, perf_text, color='white', fontsize=12, bbox=dict(facecolor='black', alpha=0.7))
 
