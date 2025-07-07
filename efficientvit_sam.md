@@ -242,6 +242,16 @@ mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/effi
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine \
     --fp16
 
+#### l1 Encoder(GPU)
+/usr/src/tensorrt/bin/trtexec \
+    --onnx=assets/export_models/efficientvit_sam/onnx/l1_encoder.onnx \
+    --minShapes=input_image:1x3x512x512 \
+    --optShapes=input_image:1x3x512x512 \
+    --maxShapes=input_image:1x3x512x512 \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine \
+    --fp16 \
+    --layerDeviceTypes=*:GPU
+
 #### l1 Decoder
 /usr/src/tensorrt/bin/trtexec \
     --onnx=assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx \
@@ -250,6 +260,16 @@ mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/effi
     --maxShapes=point_coords:1x10x2,point_labels:1x10 \
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine \
     --fp16
+
+#### l1 Decoder(GPU)
+/usr/src/tensorrt/bin/trtexec \
+    --onnx=assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine \
+    --fp16 \
+    --layerDeviceTypes=*:GPU \
+    --minShapes=image_embeddings:1x256x64x64,point_coords:1x1x2,point_labels:1x1 \
+    --optShapes=image_embeddings:1x256x64x64,point_coords:1x5x2,point_labels:1x5 \
+    --maxShapes=image_embeddings:1x256x64x64,point_coords:1x10x2,point_labels:1x10
 
 ### ONNX 파일을 TensorRT로 변환(l1, int8)
 
@@ -283,6 +303,9 @@ mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/effi
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_encoder_fp16.engine \
     --fp16
 
+#### XL0 Encoder(GPU)
+
+
 #### XL0 Decoder
 /usr/src/tensorrt/bin/trtexec \
     --onnx=assets/export_models/efficientvit_sam/onnx/xl0_decoder.onnx \
@@ -291,6 +314,9 @@ mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/effi
     --maxShapes=point_coords:1x10x2,point_labels:1x10 \
     --saveEngine=assets/export_models/efficientvit_sam/tensorrt/xl0_decoder_fp16.engine \
     --fp16
+
+#### XL0 Decoder(GPU)
+
 
 ### ONNX 파일을 TensorRT로 변환(XL0, int8)
 
