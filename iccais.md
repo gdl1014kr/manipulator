@@ -53,7 +53,7 @@ python applications/efficientvit_sam/efficientvit_onnx_latency.py --model effici
 
 
 nanosam에서 tensorrt(engine)파일 image test
-python3 examples/basic_usage.py --image_encoder=data/image_encoder_fp16_origin.engine --mask_decoder=data/mask_decoder_fp16_origin.engine
+python3 examples/basic_usage.py --image_encoder=data/image_encoder_fp16_origin.engine --mask_decoder=data/mask_decoder_origin.engine
 
 nanosam에서 tensorrt(engine)파일 latency 출력 & image test
 python3 examples/basic_usage_trt_latency.py --image_encoder=data/image_encoder_fp16_origin.engine --mask_decoder=data/mask_decoder_fp16_origin.engine
@@ -67,3 +67,4 @@ python3 examples/basic_usage_onnx_latency.py --image_encoder="data/image_encoder
 
 
 sudo jetson_clocks
+
