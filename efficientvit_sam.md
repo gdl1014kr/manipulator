@@ -248,7 +248,7 @@ mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/effi
     --minShapes=input_image:1x3x512x512 \
     --optShapes=input_image:1x3x512x512 \
     --maxShapes=input_image:1x3x512x512 \
-    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16_native.engine \
     --fp16 \
     --layerDeviceTypes=*:GPU
 
@@ -264,7 +264,7 @@ mv ~/Downloads/xl0_decoder.onnx ~/vlm/src/efficientvit/assets/export_models/effi
 #### l1 Decoder(GPU)
 /usr/src/tensorrt/bin/trtexec \
     --onnx=assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx \
-    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine \
+    --saveEngine=assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16_native.engine \
     --fp16 \
     --layerDeviceTypes=*:GPU \
     --minShapes=image_embeddings:1x256x64x64,point_coords:1x1x2,point_labels:1x1 \
