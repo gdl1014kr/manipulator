@@ -19,9 +19,6 @@ sudo jetson_clocks
 /usr/src/tensorrt/bin/trtexec --onnx=$HOME/ros2_nanoowl_ws/src/yoloe/onnx/yoloe-11s-seg.onnx --saveEngine=$HOME/ros2_nanoowl_ws/src/yoloe/tensorrt/yoloe-11s-seg.engine --fp16
 
 
-또는 현재 onnx 파일이 있는 경로에서
 
-trtexec --onnx=yolov8l-worldv2.onnx --saveEngine=yolov8l-worldv2.engine --fp16
-trtexec --onnx=yolov8x-worldv2.onnx --saveEngine=yolov8x-worldv2.engine --fp16
-trtexec --onnx=yolov8s-worldv2.onnx --saveEngine=yolov8s-worldv2.engine --fp16
-trtexec --onnx=yolov8m-worldv2.onnx --saveEngine=yolov8m-worldv2.engine --fp16
+
+
