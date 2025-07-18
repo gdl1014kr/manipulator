@@ -1,3 +1,11 @@
+## package install
+pip install transformers
+sudo apt-get update
+sudo apt-get install build-essential python3-dev
+pip install pycuda
+
+
+
 ## pt Download
 https://docs.ultralytics.com/ko/models/yolo-world/#how-do-i-train-a-yolo-world-model-on-my-dataset
 
