@@ -396,19 +396,19 @@ python applications/efficientvit_sam/run_efficientvit_sam_trt.py \
 
 
 ### tensorrt(engine) 파일 latency 출력 & image test(l1):
-python applications/efficientvit_sam/efficientvit_trt_experiment.py --model efficientvit-sam-l1 --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine --img_path example.png --mode point
+python applications/efficientvit_sam/efficientvit_trt_latency.py --model efficientvit-sam-l1 --encoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_encoder_fp16.engine --decoder_engine assets/export_models/efficientvit_sam/tensorrt/l1_decoder_fp16.engine --img_path example.png --mode point
 
 ### tensorrt(engine) 파일 latency 출력 & image test(xl0):
-python applications/efficientvit_sam/efficientvit_trt_experiment.py --model efficientvit-sam-xl0 --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder_fp16.engine --decoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_decoder_fp16.engine --img_path example.png --mode point
+python applications/efficientvit_sam/efficientvit_trt_latency.py --model efficientvit-sam-xl0 --encoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_encoder_fp16.engine --decoder_engine assets/export_models/efficientvit_sam/tensorrt/xl0_decoder_fp16.engine --img_path example.png --mode point
 
 ### onnx 파일 image test:
 python applications/efficientvit_sam/run_efficientvit_sam_onnx.py --model efficientvit-sam-l1 --encoder_model assets/export_models/efficientvit_sam/onnx/l1_encoder.onnx --decoder_model assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx --mode point
 
 ### onnx 파일 latency 출력 & image test(l1):
-python applications/efficientvit_sam/efficientvit_onnx_experiment.py --model efficientvit-sam-l1 --encoder_model assets/export_models/efficientvit_sam/onnx/l1_encoder.onnx --decoder_model assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx --mode point
+python applications/efficientvit_sam/efficientvit_onnx_latency.py --model efficientvit-sam-l1 --encoder_model assets/export_models/efficientvit_sam/onnx/l1_encoder.onnx --decoder_model assets/export_models/efficientvit_sam/onnx/l1_decoder.onnx --mode point
 
 ### onnx 파일 latency 출력 & image test(xl0):
-python applications/efficientvit_sam/efficientvit_onnx_experiment.py --model efficientvit-sam-xl0 --encoder_model assets/export_models/efficientvit_sam/onnx/xl0_encoder.onnx --decoder_model assets/export_models/efficientvit_sam/onnx/xl0_decoder.onnx --mode point
+python applications/efficientvit_sam/efficientvit_onnx_latency.py --model efficientvit-sam-xl0 --encoder_model assets/export_models/efficientvit_sam/onnx/xl0_encoder.onnx --decoder_model assets/export_models/efficientvit_sam/onnx/xl0_decoder.onnx --mode point
 
 -----------------------------------------------------------------------------------------
 ## intel RealSense Camera SDK 설치
